@@ -8,13 +8,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class book {
+public class Book {
     @Id
     @GeneratedValue
     private Integer id;
@@ -22,6 +24,8 @@ public class book {
     private String description;
     private Float avgRating;
     private String coverImage;
+    private Timestamp publicDate;
     @ManyToMany(mappedBy = "books")
-    private List<genre> genres;
+    private List<Genre> genres;
+
 }

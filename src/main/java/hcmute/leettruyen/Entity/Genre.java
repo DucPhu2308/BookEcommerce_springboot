@@ -6,13 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class genre {
+public class Genre {
     @Id
     @GeneratedValue
     private Integer id;
@@ -23,5 +22,5 @@ public class genre {
             joinColumns =@JoinColumn(name = "genre_id"),
             inverseJoinColumns =@JoinColumn(name = "book_id")
     )
-    private List<book> books;
+    private List<Book> books;
 }
