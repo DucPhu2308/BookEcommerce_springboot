@@ -27,5 +27,6 @@ public class Book {
     private Timestamp publicDate;
     @ManyToMany(mappedBy = "books")
     private List<Genre> genres;
-
+    @ManyToMany(mappedBy = "books")
+    private List<Author> authors;
 }
