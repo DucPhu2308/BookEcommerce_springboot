@@ -1,4 +1,4 @@
-package hcmute.leettruyen.Entity;
+package hcmute.leettruyen.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

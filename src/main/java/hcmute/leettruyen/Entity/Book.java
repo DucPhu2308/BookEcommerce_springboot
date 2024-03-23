@@ -1,4 +1,4 @@
-package hcmute.leettruyen.Entity;
+package hcmute.leettruyen.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
