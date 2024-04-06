@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class PurchasedHistory {
     @GeneratedValue
     private Integer id;
     private int coin;
-    private Timestamp dateTime;
+    private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "chapter_id")
     private Chapter chapter;

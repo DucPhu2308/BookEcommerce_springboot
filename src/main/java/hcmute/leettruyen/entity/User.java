@@ -3,10 +3,12 @@ package hcmute.leettruyen.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,16 +16,16 @@ import java.util.List;
 @Table(
         name = "t_user"
 )
-public class User {
+public class User extends BaseEntity{
     @Id
     @GeneratedValue
     private Integer id;
     private String email;
     private String username;
     private String password;
-    private Integer coin;
+    private int coin;
     private String introduction;
-    private Boolean active;
+    private boolean active;
     @OneToMany(mappedBy = "user")
     private List<UserTransaction> userTransactionList;
     @OneToMany(mappedBy = "user")

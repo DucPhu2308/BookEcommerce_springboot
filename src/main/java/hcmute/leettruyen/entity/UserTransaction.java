@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,9 +16,9 @@ public class UserTransaction {
     @Id
     @GeneratedValue
     private Integer id;
-    private Integer coin;
+    private int coin;
     private Float amount;
-    private Timestamp dateTime;
+    private LocalDateTime dateTime;
     private Boolean isDeposit;
     @ManyToOne
     @JoinColumn(

@@ -3,13 +3,15 @@ package hcmute.leettruyen.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Rating {
+public class Rating extends BaseEntity{
     @Id
     @GeneratedValue
     private Integer id;

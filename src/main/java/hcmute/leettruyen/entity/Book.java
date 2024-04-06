@@ -1,18 +1,18 @@
 package hcmute.leettruyen.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Book {
+@Builder
+public class Book extends BaseEntity{
     @Id
     @GeneratedValue
     private Integer id;
@@ -20,7 +20,7 @@ public class Book {
     private String description;
     private Float avgRating;
     private String coverImage;
-    private Timestamp publicDate;
+    private LocalDateTime publicDate;
     @ManyToMany(mappedBy = "books")
     private List<Genre> genres;
     @ManyToMany(mappedBy = "books")
