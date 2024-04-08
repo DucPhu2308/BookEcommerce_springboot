@@ -16,6 +16,7 @@ public class Genre {
     @GeneratedValue
     private Integer id;
     private String name;
+    private String color;
     @ManyToMany
     @JoinTable(
             name = "book_genre",

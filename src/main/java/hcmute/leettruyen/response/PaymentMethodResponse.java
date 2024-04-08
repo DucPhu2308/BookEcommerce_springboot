@@ -1,15 +1,12 @@
-package hcmute.leettruyen.dto;
+package hcmute.leettruyen.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class GenreDto {
+@NoArgsConstructor
+public class PaymentMethodResponse {
     private String name;
-    private String color;
 }

@@ -1,15 +1,16 @@
-package hcmute.leettruyen.dto;
+package hcmute.leettruyen.response;
 
+import hcmute.leettruyen.entity.Book;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class GenreDto {
+public class GenreResponse {
     private String name;
     private String color;
+    private List<Book> books;
 }

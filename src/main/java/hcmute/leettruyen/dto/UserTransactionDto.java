@@ -11,5 +11,4 @@ public class UserTransactionDto {
     private Float amount;
     private Integer paymentMethod;
     private Integer user;
-
 }
