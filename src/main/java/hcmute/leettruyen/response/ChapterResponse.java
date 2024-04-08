@@ -15,7 +15,7 @@ public class ChapterResponse {
     private String title;
     private int price;
     private int index;
-    private Book book;
-    private List<Comment> comments;
-    private List<Paragraph> paragraphs;
+    private BookResponse book;
+    private List<CommentResponse> comments;
+    private List<ParagraphResponse> paragraphs;
 }

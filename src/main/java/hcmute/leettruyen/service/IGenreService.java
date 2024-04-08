@@ -11,5 +11,5 @@ public interface IGenreService {
     List<GenreResponse> getAllGenre();
     GenreResponse updateGenre(Integer id, GenreDto genreDto) throws Exception;
     void deleteGenre(Integer id);
-    List<BookResponse> booksByGenre(Integer id);
+    List<BookResponse> booksByGenre(Integer id) throws Exception;
 }

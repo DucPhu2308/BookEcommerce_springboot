@@ -13,6 +13,6 @@ import java.util.List;
 public class ParagraphResponse {
     private String content;
     private int index;
-    private Chapter chapter;
-    private List<User> users;
+    private ChapterResponse chapter;
+    private List<UserResponse> users;
 }

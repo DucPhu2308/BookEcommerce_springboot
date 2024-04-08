@@ -12,5 +12,4 @@ import java.util.List;
 public class GenreResponse {
     private String name;
     private String color;
-    private List<Book> books;
 }

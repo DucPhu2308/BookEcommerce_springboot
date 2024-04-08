@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 public class PurchasedHistoryResponse {
     private int coin;
     private LocalDateTime dateTime;
-    private Chapter chapter;
-    private User user;
+    private ChapterResponse chapter;
+    private UserResponse user;
 }

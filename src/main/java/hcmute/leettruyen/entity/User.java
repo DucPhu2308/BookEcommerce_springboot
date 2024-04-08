@@ -1,10 +1,7 @@
 package hcmute.leettruyen.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -16,6 +13,7 @@ import java.util.List;
 @Table(
         name = "t_user"
 )
+@Builder
 public class User extends BaseEntity{
     @Id
     @GeneratedValue
@@ -45,7 +43,7 @@ public class User extends BaseEntity{
     private List<Paragraph> paragraphs;
     @ManyToMany(mappedBy = "users_follow")
     private List<Book> books;
-    @OneToMany(mappedBy = "user_own")
+    @OneToMany(mappedBy = "userOwn")
     private List<Book> own;
     @ManyToMany(mappedBy = "subscribing")
     private List<User> subscribed;

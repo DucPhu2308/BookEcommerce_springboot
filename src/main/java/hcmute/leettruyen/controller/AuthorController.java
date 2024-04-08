@@ -1,8 +1,8 @@
 package hcmute.leettruyen.controller;
 
-import hcmute.leettruyen.dto.GenreDto;
+import hcmute.leettruyen.dto.AuthorDto;
 import hcmute.leettruyen.entity.ResponseObject;
-import hcmute.leettruyen.service.IGenreService;
+import hcmute.leettruyen.service.IAuthorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/genre")
+@RequestMapping("/api/v1/author")
 @RequiredArgsConstructor
-public class GenreController {
-    private final IGenreService genreService;
+public class AuthorController {
+    private final IAuthorService authorService;
     @PostMapping("")
-    public ResponseEntity<ResponseObject> createGenre(
-            @Valid @RequestBody GenreDto genreDto,
-            BindingResult result){
+    public ResponseEntity<ResponseObject> createAuthor(
+            @Valid @RequestBody AuthorDto authorDto,
+            BindingResult result
+            ){
         if(result.hasErrors()){
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
@@ -33,28 +34,42 @@ public class GenreController {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            genreService.createGenre(genreDto)));
+                            authorService.createAuthor(authorDto)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
-    @GetMapping("/all")
-    public ResponseEntity<ResponseObject> findAllGenre(){
+    @GetMapping("")
+    public ResponseEntity<ResponseObject> getAllAuthor(){
         try {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            genreService.getAllGenre()));
+                            authorService.getAllAuthor()));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/{id}/books")
+    public ResponseEntity<ResponseObject> findBookByAuthor(
+            @PathVariable Integer id
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            authorService.booksByAuthor(id)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateGenre(
+    public ResponseEntity<ResponseObject> updateAuthor(
             @PathVariable Integer id,
-            @Valid @RequestBody GenreDto genreDto,
+            @Valid @RequestBody AuthorDto authorDto,
             BindingResult result
     ){
         if(result.hasErrors()){
@@ -69,21 +84,7 @@ public class GenreController {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            genreService.updateGenre(id,genreDto)));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(
-                    new ResponseObject("Fail",e.getMessage(),""));
-        }
-    }
-    @GetMapping("/{id}/books")
-    public ResponseEntity<ResponseObject> findBookByGenre(
-            @PathVariable Integer id
-    ){
-        try {
-            return ResponseEntity.ok(
-                    new ResponseObject("ok",
-                            "",
-                            genreService.booksByGenre(id)));
+                            authorService.updateAuthor(id,authorDto)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

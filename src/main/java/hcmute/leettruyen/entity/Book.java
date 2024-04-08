@@ -21,9 +21,19 @@ public class Book extends BaseEntity{
     private Float avgRating;
     private String coverImage;
     private LocalDateTime publicDate;
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "book_genre",
+            joinColumns =@JoinColumn(name = "book_id"),
+            inverseJoinColumns =@JoinColumn(name = "genre_id")
+    )
     private List<Genre> genres;
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "book_author",
+            joinColumns =@JoinColumn(name = "book_id"),
+            inverseJoinColumns =@JoinColumn(name = "genre_id")
+    )
     private List<Author> authors;
     @OneToMany(mappedBy = "book")
     private List<Rating> ratings;
@@ -40,5 +50,5 @@ public class Book extends BaseEntity{
     @JoinColumn(
             name = "user_own_id"
     )
-    private User user_own;
+    private User userOwn;
 }

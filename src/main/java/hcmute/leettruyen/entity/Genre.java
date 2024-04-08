@@ -2,6 +2,7 @@ package hcmute.leettruyen.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,17 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Genre {
     @Id
     @GeneratedValue
     private Integer id;
     private String name;
     private String color;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "book_genre",
-            joinColumns =@JoinColumn(name = "genre_id"),
-            inverseJoinColumns =@JoinColumn(name = "book_id")
-    )
+    @ManyToMany(mappedBy = "genres")
     private List<Book> books;
 }

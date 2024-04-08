@@ -1,10 +1,6 @@
 package hcmute.leettruyen.response;
 
 import hcmute.leettruyen.entity.*;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +15,8 @@ public class UserResponse {
     private int coin;
     private String introduction;
     private boolean active;
-    private List<UserTransaction> userTransactionList;
     private List<Rating> ratings;
     private List<Role> roles;
-    private List<PurchasedHistory> purchasedHistories;
     private List<Comment> comments;
     private List<Paragraph> paragraphs;
     private List<Book> books;

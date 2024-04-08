@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class RoleResponse {
     private String name;
-    private List<User> users;
+    private List<UserResponse> users;
 }

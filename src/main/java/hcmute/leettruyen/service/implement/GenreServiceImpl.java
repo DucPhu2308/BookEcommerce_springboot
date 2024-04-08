@@ -1,7 +1,9 @@
 package hcmute.leettruyen.service.implement;
 
 import hcmute.leettruyen.dto.GenreDto;
+import hcmute.leettruyen.entity.Book;
 import hcmute.leettruyen.entity.Genre;
+import hcmute.leettruyen.repository.BookRepository;
 import hcmute.leettruyen.repository.GenreRepository;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.GenreResponse;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements IGenreService {
     private final GenreRepository genreRepository;
+    private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
     @Override
     public GenreResponse createGenre(GenreDto genreDto) {
@@ -52,7 +55,11 @@ public class GenreServiceImpl implements IGenreService {
     }
 
     @Override
-    public List<BookResponse> booksByGenre(Integer id) {
-        return null;
+    public List<BookResponse> booksByGenre(Integer id) throws Exception {
+        Genre foundGenre = genreRepository.findById(id)
+                .orElseThrow(()-> new Exception("Cannot find genre"));
+        List<Book> books = bookRepository.findAllByGenresContains(foundGenre);
+        return books.stream().map(book -> modelMapper.map(book,BookResponse.class))
+                .collect(Collectors.toList());
     }
 }

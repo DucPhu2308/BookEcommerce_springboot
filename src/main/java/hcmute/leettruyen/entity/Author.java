@@ -1,10 +1,7 @@
 package hcmute.leettruyen.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,17 +9,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Author{
     @Id
     @GeneratedValue
     private Integer id;
     private String name;
     private String avatarLink;
-    @ManyToMany
-    @JoinTable(
-            name = "book_author",
-            joinColumns =@JoinColumn(name = "author_id"),
-            inverseJoinColumns =@JoinColumn(name = "book_id")
-    )
+    @ManyToMany(mappedBy = "authors")
     private List<Book> books;
 }

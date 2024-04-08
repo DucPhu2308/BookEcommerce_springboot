@@ -14,8 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class CommentResponse {
     private String content;
-    private Comment parent;
-    private List<Comment> children;
-    private Chapter chapter;
-    private User user;
+    private CommentResponse parent;
+    private List<CommentResponse> children;
+    private ChapterResponse chapter;
+    private UserResponse user;
 }
