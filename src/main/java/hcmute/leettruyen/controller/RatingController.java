@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rating")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class RatingController {
     private final IRatingService ratingService;

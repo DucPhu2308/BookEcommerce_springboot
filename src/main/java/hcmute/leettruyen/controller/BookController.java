@@ -20,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/book")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class BookController {
     private final IBookService bookService;
