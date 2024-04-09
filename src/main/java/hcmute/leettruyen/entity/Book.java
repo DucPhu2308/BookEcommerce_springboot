@@ -1,5 +1,7 @@
 package hcmute.leettruyen.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +29,7 @@ public class Book extends BaseEntity{
             joinColumns =@JoinColumn(name = "book_id"),
             inverseJoinColumns =@JoinColumn(name = "genre_id")
     )
+    @JsonManagedReference
     private List<Genre> genres;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -34,10 +37,13 @@ public class Book extends BaseEntity{
             joinColumns =@JoinColumn(name = "book_id"),
             inverseJoinColumns =@JoinColumn(name = "genre_id")
     )
+    @JsonManagedReference
     private List<Author> authors;
     @OneToMany(mappedBy = "book")
+    @JsonManagedReference
     private List<Rating> ratings;
     @OneToMany(mappedBy = "book")
+    @JsonManagedReference
     private List<Chapter> chapters;
     @ManyToMany
     @JoinTable(
@@ -45,10 +51,12 @@ public class Book extends BaseEntity{
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonBackReference
     private List<User> users_follow;
     @ManyToOne
     @JoinColumn(
             name = "user_own_id"
     )
+    @JsonBackReference
     private User userOwn;
 }

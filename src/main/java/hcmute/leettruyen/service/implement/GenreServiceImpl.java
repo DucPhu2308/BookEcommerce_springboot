@@ -44,6 +44,8 @@ public class GenreServiceImpl implements IGenreService {
     public GenreResponse updateGenre(Integer id, GenreDto genreDto) throws Exception {
         Genre foundGenre = genreRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot found Genre"));
+//        foundGenre.setName(genreDto.getName());
+//        foundGenre.setColor(genreDto.getColor());
         modelMapper.map(genreDto,foundGenre);
         genreRepository.save(foundGenre);
         return modelMapper.map(foundGenre,GenreResponse.class);

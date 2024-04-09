@@ -1,5 +1,7 @@
 package hcmute.leettruyen.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +22,6 @@ public class Genre {
     private String name;
     private String color;
     @ManyToMany(mappedBy = "genres")
+    @JsonBackReference
     private List<Book> books;
 }

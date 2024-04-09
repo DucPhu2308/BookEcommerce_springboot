@@ -1,48 +1,27 @@
 package hcmute.leettruyen.controller;
 
-import hcmute.leettruyen.dto.BookDto;
+import hcmute.leettruyen.dto.CommentDto;
 import hcmute.leettruyen.entity.ResponseObject;
-import hcmute.leettruyen.response.BookResponse;
-import hcmute.leettruyen.service.IBookService;
+import hcmute.leettruyen.service.ICommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/book")
+@RequestMapping("/api/v1/comment")
 @RequiredArgsConstructor
-public class BookController {
-    private final IBookService bookService;
-    @GetMapping("")
-    public ResponseEntity<ResponseObject> getBook(
-            @RequestParam("page") int page
-    ){
-        PageRequest pageRequest = PageRequest.of(
-                page, 10, Sort.by("createdAt").descending());
-        Page<BookResponse> bookResponsePage = bookService.getAllBook(pageRequest);
-        int totalPage = bookResponsePage.getTotalPages();
-        List<BookResponse> bookResponses = bookResponsePage.getContent();
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("totalPage", totalPage);
-        responseData.put("books", bookResponses);
-        return ResponseEntity.ok(
-                new ResponseObject("ok",
-                        "",responseData));
-    }
+public class CommentController {
+    private final ICommentService commentService;
     @PostMapping("")
-    public ResponseEntity<ResponseObject> createBook(
-            @Valid @RequestBody BookDto bookDto,
-            BindingResult result){
+    public ResponseEntity<ResponseObject> createComment(
+            @Valid @RequestBody CommentDto commentDto,
+            BindingResult result
+            ){
         if(result.hasErrors()){
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
@@ -55,30 +34,30 @@ public class BookController {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            bookService.createBook(bookDto)));
+                            commentService.createComment(commentDto)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getBookById(
+    @GetMapping("/chapter/{id}")
+    public ResponseEntity<ResponseObject> getCommentByChapter(
             @PathVariable Integer id
     ){
         try {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            bookService.getBookById(id)));
+                            commentService.getCommentByChapter(id)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseObject> updateBook(
+    public ResponseEntity<ResponseObject> updateComment(
             @PathVariable Integer id,
-            @Valid @RequestBody BookDto bookDto,
+            @Valid @RequestBody CommentDto commentDto,
             BindingResult result
     ){
         if(result.hasErrors()){
@@ -93,7 +72,22 @@ public class BookController {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            bookService.updateBook(id,bookDto)));
+                            commentService.updateComment(id,commentDto)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteComment(
+            @PathVariable Integer id
+    ){
+        try {
+            commentService.deleteComment(id);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            ""));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

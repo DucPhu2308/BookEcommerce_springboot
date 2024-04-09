@@ -1,5 +1,6 @@
 package hcmute.leettruyen.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +26,10 @@ public class User extends BaseEntity{
     private String introduction;
     private boolean active;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<UserTransaction> userTransactionList;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Rating> ratings;
     @ManyToMany
     @JoinTable(
@@ -36,14 +39,17 @@ public class User extends BaseEntity{
     )
     private List<Role> roles;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<PurchasedHistory> purchasedHistories;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Comment> comments;
     @ManyToMany(mappedBy = "users")
     private List<Paragraph> paragraphs;
     @ManyToMany(mappedBy = "users_follow")
     private List<Book> books;
     @OneToMany(mappedBy = "userOwn")
+    @JsonManagedReference
     private List<Book> own;
     @ManyToMany(mappedBy = "subscribing")
     private List<User> subscribed;

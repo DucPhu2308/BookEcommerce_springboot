@@ -60,8 +60,18 @@ public class BookServiceImpl implements IBookService {
     }
 
     @Override
-    public BookResponse updateBook(Integer id, BookDto bookDto) {
-        return null;
+    public BookResponse updateBook(Integer id, BookDto bookDto) throws Exception {
+        Book foundBook = bookRepository.findById(id)
+                .orElseThrow(()-> new Exception("Cannot find book"));
+        List<Genre> genres = genreRepository.findAllById(bookDto.getGenresDto());
+        List<Author> authors = authorRepository.findAllById(bookDto.getAuthorsDto());
+        foundBook.setTitle(bookDto.getTitle());
+        foundBook.setDescription(bookDto.getDescription());
+        foundBook.setCoverImage(bookDto.getCoverImage());
+        foundBook.setGenres(genres);
+        foundBook.setAuthors(authors);
+        bookRepository.save(foundBook);
+        return modelMapper.map(foundBook,BookResponse.class);
     }
 
     @Override

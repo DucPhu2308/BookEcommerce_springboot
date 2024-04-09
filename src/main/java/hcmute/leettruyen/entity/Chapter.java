@@ -1,5 +1,7 @@
 package hcmute.leettruyen.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,11 +24,15 @@ public class Chapter extends BaseEntity{
     private int index;
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonBackReference
     private Book book;
     @OneToMany(mappedBy = "chapter")
+    @JsonManagedReference
     private List<Comment> comments;
     @OneToMany(mappedBy = "chapter")
+    @JsonManagedReference
     private List<PurchasedHistory> purchasedHistories;
     @OneToMany(mappedBy = "chapter")
+    @JsonManagedReference
     private List<Paragraph> paragraphs;
 }

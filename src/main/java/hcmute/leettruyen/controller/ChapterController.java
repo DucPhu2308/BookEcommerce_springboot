@@ -1,0 +1,80 @@
+package hcmute.leettruyen.controller;
+
+import hcmute.leettruyen.dto.ChapterDto;
+import hcmute.leettruyen.entity.ResponseObject;
+import hcmute.leettruyen.service.IChapterService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/chapter")
+@RequiredArgsConstructor
+public class ChapterController {
+    private final IChapterService chapterService;
+    @GetMapping("/book/{id}")
+    public ResponseEntity<ResponseObject> getChapterByBook(
+            @PathVariable Integer id
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            chapterService.chapterByBook(id)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<ResponseObject> createChapter(
+            @Valid @RequestBody ChapterDto chapterDto,
+            BindingResult result){
+        if(result.hasErrors()){
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("failed", errorMessages.toString(),""));
+        }
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            chapterService.createChapter(chapterDto)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseObject> updateChapter(
+            @PathVariable Integer id,
+            @Valid @RequestBody ChapterDto chapterDto,
+            BindingResult result
+    ){
+        if(result.hasErrors()){
+            List<String> errorMessages = result.getFieldErrors()
+                    .stream()
+                    .map(FieldError::getDefaultMessage)
+                    .toList();
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("failed", errorMessages.toString(),""));
+        }
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            chapterService.updateChapter(id,chapterDto)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+}
