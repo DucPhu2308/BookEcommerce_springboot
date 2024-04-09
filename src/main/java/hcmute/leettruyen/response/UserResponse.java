@@ -1,4 +1,4 @@
-package hcmute.leettruyen.dto;
+package hcmute.leettruyen.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserTransactionDto {
+public class UserResponse {
+    private String email;
+    private String username;
     private int coin;
-    private Float amount;
-    private Integer paymentMethod;
-    private Integer user;
+    private String introduction;
 }

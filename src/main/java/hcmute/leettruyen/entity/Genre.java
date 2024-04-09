@@ -1,7 +1,10 @@
 package hcmute.leettruyen.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,16 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Genre {
     @Id
     @GeneratedValue
     private Integer id;
     private String name;
-    @ManyToMany
-    @JoinTable(
-            name = "book_genre",
-            joinColumns =@JoinColumn(name = "genre_id"),
-            inverseJoinColumns =@JoinColumn(name = "book_id")
-    )
+    private String color;
+    @ManyToMany(mappedBy = "genres")
+    @JsonBackReference
     private List<Book> books;
 }
