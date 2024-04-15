@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserResponse {
     private String email;
-    private String username;
+    private String userName;
     private int coin;
     private String introduction;
 }
