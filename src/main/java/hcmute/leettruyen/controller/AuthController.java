@@ -2,9 +2,12 @@ package hcmute.leettruyen.controller;
 
 import hcmute.leettruyen.dto.UserDto;
 import hcmute.leettruyen.entity.ResponseObject;
+import hcmute.leettruyen.entity.User;
+import hcmute.leettruyen.response.UserResponse;
 import hcmute.leettruyen.service.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -22,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
     private final IUserService userService;
+    private final ModelMapper modelMapper;
     @PostMapping("/register")
     public ResponseEntity<ResponseObject> register(
             @Valid @RequestBody UserDto userDto,
@@ -57,8 +63,14 @@ public class AuthController {
         }
         try {
             String token = userService.login(userDto.getEmail(), userDto.getPassword());
+            User user = userService.findByEmail(userDto.getEmail());
+            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("token", token);
+            responseData.put("user", userResponse);
+            responseData.put("roles", user.getAuthorities());
             return ResponseEntity.ok(
-                    new ResponseObject("ok","",token)
+                    new ResponseObject("ok","",responseData)
             );
         } catch (Exception e) {
             return ResponseEntity.ok(
