@@ -53,4 +53,10 @@ public class UserServiceImpl implements IUserService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, passWord, user.getAuthorities()));
         return jwtTokenUtil.generateToken(user);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        Optional<User> foundUser = userRepository.findByEmail(email);
+        return foundUser.orElse(null);
+    }
 }

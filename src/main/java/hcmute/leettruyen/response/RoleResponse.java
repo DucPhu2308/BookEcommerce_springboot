@@ -1,5 +1,6 @@
 package hcmute.leettruyen.response;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import hcmute.leettruyen.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
