@@ -99,4 +99,12 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public List<String> getAllRoles(){
+        List<String> roles = new ArrayList<>();
+        for (Role role : this.roles) {
+            roles.add(role.getName());
+        }
+        return roles;
+    }
 }

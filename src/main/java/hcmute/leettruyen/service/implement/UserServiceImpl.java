@@ -31,7 +31,7 @@ public class UserServiceImpl implements IUserService {
             throw new DataIntegrityViolationException("Email exist!");
         }
         User user = User.builder()
-                .userName(userDto.getUsername())
+                .userName(userDto.getUserName())
                 .email(userDto.getEmail())
                 .build();
         Role role = roleRepository.findById(2)
