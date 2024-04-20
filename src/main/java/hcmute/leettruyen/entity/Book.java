@@ -42,7 +42,7 @@ public class Book extends BaseEntity{
     @OneToMany(mappedBy = "book")
     @JsonManagedReference
     private List<Rating> ratings;
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Chapter> chapters;
     @ManyToMany
