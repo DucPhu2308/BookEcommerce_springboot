@@ -61,7 +61,7 @@ public class BookServiceImpl implements IBookService {
     }
 
     @Override
-    @PreAuthorize("bookRepository.findById(#id).get().userOwn.email == principal.username")
+    @PreAuthorize("bookRepository.findById(#id).get().userOwn.email == principal.username || hasRole('ADMIN')")
     public BookResponse updateBook(Integer id, BookDto bookDto) throws Exception {
         Book foundBook = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));

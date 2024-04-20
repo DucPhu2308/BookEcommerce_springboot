@@ -4,8 +4,7 @@ import hcmute.leettruyen.filter.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,13 +21,37 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(request -> {
-                    request
-                            .requestMatchers("/api/v1/auth/login",
-                                    "/api/v1/auth/register")
-                            .permitAll()
-                            .anyRequest().authenticated();
-                });
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/v1/auth/login",
+                                "/api/v1/auth/register")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/book/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/author/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/genre/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/author/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/v1/author/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/v1/author/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/genre/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/v1/genre/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/v1/genre/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/book/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/chapter/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/comment/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/v1/comment/**").hasAnyRole("USER","ADMIN")
+                        .anyRequest().authenticated());
         return httpSecurity.build();
     }
 }
