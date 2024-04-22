@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -60,6 +61,7 @@ public class BookServiceImpl implements IBookService {
     }
 
     @Override
+    @PreAuthorize("bookRepository.findById(#id).get().userOwn.email == principal.username || hasRole('ADMIN')")
     public BookResponse updateBook(Integer id, BookDto bookDto) throws Exception {
         Book foundBook = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));
@@ -76,7 +78,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public void deleteBook(Integer id) {
-
+        bookRepository.deleteById(id);
     }
 
     @Override
