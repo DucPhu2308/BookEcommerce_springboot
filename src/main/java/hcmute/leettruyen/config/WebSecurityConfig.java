@@ -49,6 +49,8 @@ public class WebSecurityConfig {
                                 "/api/v1/genre/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/book/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/v1/book/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/chapter/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.POST,
