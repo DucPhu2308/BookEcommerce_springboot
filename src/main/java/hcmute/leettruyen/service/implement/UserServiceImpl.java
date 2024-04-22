@@ -59,4 +59,9 @@ public class UserServiceImpl implements IUserService {
         Optional<User> foundUser = userRepository.findByEmail(email);
         return foundUser.orElse(null);
     }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

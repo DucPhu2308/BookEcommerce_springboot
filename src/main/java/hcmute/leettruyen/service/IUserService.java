@@ -7,4 +7,5 @@ public interface IUserService {
     User createUser(UserDto userDto);
     String login(String email, String passWord) throws Exception;
     User findByEmail(String email);
+    Boolean existsByEmail(String email);
 }
