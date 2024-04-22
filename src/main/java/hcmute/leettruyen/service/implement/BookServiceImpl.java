@@ -59,9 +59,8 @@ public class BookServiceImpl implements IBookService {
         bookRepository.save(book);
         return modelMapper.map(book, BookResponse.class);
     }
-
+    @PreAuthorize("@bookServiceImpl.getEmailByBook(#id) == authentication.principal.username")
     @Override
-    @PreAuthorize("bookRepository.findById(#id).get().userOwn.email == principal.username || hasRole('ADMIN')")
     public BookResponse updateBook(Integer id, BookDto bookDto) throws Exception {
         Book foundBook = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));
@@ -91,5 +90,10 @@ public class BookServiceImpl implements IBookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));
         return modelMapper.map(book,BookResponse.class);
+    }
+    public String getEmailByBook(Integer id) throws Exception {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(()-> new Exception("Cannot find book"));
+        return book.getUserOwn().getEmail();
     }
 }
