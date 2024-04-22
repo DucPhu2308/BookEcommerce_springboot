@@ -1,18 +1,17 @@
 package hcmute.leettruyen.response;
 
-import hcmute.leettruyen.entity.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserResponse {
     private String email;
-    private String userName;
+    private String displayName;
     private int coin;
     private String introduction;
 }

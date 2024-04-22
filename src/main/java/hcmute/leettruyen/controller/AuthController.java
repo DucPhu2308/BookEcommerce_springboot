@@ -1,5 +1,6 @@
 package hcmute.leettruyen.controller;
 
+import hcmute.leettruyen.dto.LoginDto;
 import hcmute.leettruyen.dto.UserDto;
 import hcmute.leettruyen.entity.ResponseObject;
 import hcmute.leettruyen.entity.User;
@@ -43,14 +44,7 @@ public class AuthController {
         try {
                 User user = userService.createUser(userDto);
                 String token = userService.login(userDto.getEmail(), userDto.getPassword());
-                UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-            Map<String, Object> responseData = new HashMap<>();
-            responseData.put("token", token);
-            responseData.put("user", userResponse);
-            responseData.put("roles", user.getAllRoles());
-            return ResponseEntity.ok(
-                    new ResponseObject("ok","",responseData)
-            );
+            return getResponseObjectResponseEntity(token, user);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
@@ -58,7 +52,7 @@ public class AuthController {
     }
     @PostMapping("/login")
     public ResponseEntity<ResponseObject> login(
-            @Valid @RequestBody UserDto userDto,
+            @Valid @RequestBody LoginDto loginDto,
             BindingResult result){
         if(result.hasErrors()){
             List<String> errorMessages = result.getFieldErrors()
@@ -69,20 +63,24 @@ public class AuthController {
                     new ResponseObject("failed", errorMessages.toString(),""));
         }
         try {
-            String token = userService.login(userDto.getEmail(), userDto.getPassword());
-            User user = userService.findByEmail(userDto.getEmail());
-            UserResponse userResponse = modelMapper.map(user, UserResponse.class);
-            Map<String, Object> responseData = new HashMap<>();
-            responseData.put("token", token);
-            responseData.put("user", userResponse);
-            responseData.put("roles", user.getAllRoles());
-            return ResponseEntity.ok(
-                    new ResponseObject("ok","",responseData)
-            );
+            String token = userService.login(loginDto.getEmail(), loginDto.getPassword());
+            User user = userService.findByEmail(loginDto.getEmail());
+            return getResponseObjectResponseEntity(token, user);
         } catch (Exception e) {
             return ResponseEntity.ok(
                     new ResponseObject("fail",e.getMessage(),"")
             );
         }
+    }
+
+    private ResponseEntity<ResponseObject> getResponseObjectResponseEntity(String token, User user) {
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("token", token);
+        responseData.put("user", userResponse);
+        responseData.put("roles", user.getAllRoles());
+        return ResponseEntity.ok(
+                new ResponseObject("ok","",responseData)
+        );
     }
 }

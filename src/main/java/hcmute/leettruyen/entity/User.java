@@ -25,7 +25,7 @@ public class User extends BaseEntity implements UserDetails {
     @GeneratedValue
     private Integer id;
     private String email;
-    private String userName;
+    private String displayName;
     private String password;
     private int coin;
     private String introduction;
