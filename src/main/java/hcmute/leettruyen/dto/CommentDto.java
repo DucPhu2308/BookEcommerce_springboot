@@ -12,5 +12,4 @@ public class CommentDto {
     private String content;
     private Integer parent;
     private Integer chapter;
-    private Integer user;
 }

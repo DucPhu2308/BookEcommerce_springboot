@@ -1,6 +1,5 @@
 package hcmute.leettruyen.dto;
 
-import hcmute.leettruyen.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +19,4 @@ public class BookDto {
     private String coverImage;
     private List<Integer> genresDto;
     private List<Integer> authorsDto;
-    private Integer userOwn;
 }

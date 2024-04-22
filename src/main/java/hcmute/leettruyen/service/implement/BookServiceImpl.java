@@ -1,5 +1,6 @@
 package hcmute.leettruyen.service.implement;
 
+import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.dto.BookDto;
 import hcmute.leettruyen.entity.Author;
 import hcmute.leettruyen.entity.Book;
@@ -29,6 +30,7 @@ public class BookServiceImpl implements IBookService {
     private final GenreRepository genreRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final Extractor extractor;
 
     @Override
     public Page<BookResponse> getAllBook(PageRequest pageRequest) {
@@ -46,7 +48,7 @@ public class BookServiceImpl implements IBookService {
     public BookResponse createBook(BookDto bookDto) throws Exception {
         List<Genre> genres = genreRepository.findAllById(bookDto.getGenresDto());
         List<Author> authors = authorRepository.findAllById(bookDto.getAuthorsDto());
-        User founduser = userRepository.findById(bookDto.getUserOwn())
+        User founduser = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()-> new Exception("Cannot find user"));
         Book book = new Book();
         modelMapper.typeMap(BookDto.class, Book.class)

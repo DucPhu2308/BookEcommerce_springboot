@@ -1,5 +1,6 @@
 package hcmute.leettruyen.service.implement;
 
+import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.dto.CommentDto;
 import hcmute.leettruyen.entity.Chapter;
 import hcmute.leettruyen.entity.Comment;
@@ -23,6 +24,7 @@ public class CommentServiceImpl implements ICommentService {
     private final UserRepository userRepository;
     private final ChapterRepository chapterRepository;
     private final ModelMapper modelMapper;
+    private final Extractor extractor;
     @Override
     public CommentResponse createComment(CommentDto commentDto) throws Exception {
         Comment comment = new Comment();
@@ -31,7 +33,7 @@ public class CommentServiceImpl implements ICommentService {
                     .orElseThrow(()-> new Exception("Cannot find parent"));
             comment.setParent(foundComment);
         }
-        User foundUser = userRepository.findById(commentDto.getUser())
+        User foundUser = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()-> new Exception("Cannot find user"));
         Chapter foundChapter = chapterRepository.findById(commentDto.getChapter())
                 .orElseThrow(()-> new Exception("Cannot find user"));
