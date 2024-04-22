@@ -41,9 +41,16 @@ public class AuthController {
                     new ResponseObject("failed", errorMessages.toString(),""));
         }
         try {
+                User user = userService.createUser(userDto);
+                String token = userService.login(userDto.getEmail(), userDto.getPassword());
+                UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("token", token);
+            responseData.put("user", userResponse);
+            responseData.put("roles", user.getAllRoles());
             return ResponseEntity.ok(
-                    new ResponseObject("ok","",
-                            userService.createUser(userDto)));
+                    new ResponseObject("ok","",responseData)
+            );
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
