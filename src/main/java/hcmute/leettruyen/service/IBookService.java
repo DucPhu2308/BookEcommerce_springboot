@@ -12,4 +12,5 @@ public interface IBookService {
     void deleteBook(Integer id);
     void hideBook(Integer id);
     BookResponse getBookById(Integer id) throws Exception;
+    String getEmailByBook(Integer id) throws Exception;
 }

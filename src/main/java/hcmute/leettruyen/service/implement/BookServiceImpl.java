@@ -93,6 +93,7 @@ public class BookServiceImpl implements IBookService {
                 .orElseThrow(()-> new Exception("Cannot find book"));
         return modelMapper.map(book,BookResponse.class);
     }
+    @Override
     public String getEmailByBook(Integer id) throws Exception {
         Book book = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));

@@ -27,7 +27,8 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/login",
-                                "/api/v1/auth/register")
+                                "/api/v1/auth/register",
+                                "/api/v1/upload/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/book/**").permitAll()
