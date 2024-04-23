@@ -45,7 +45,7 @@ public class Book extends BaseEntity{
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Chapter> chapters;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "follow",
             joinColumns = @JoinColumn(name = "book_id"),
