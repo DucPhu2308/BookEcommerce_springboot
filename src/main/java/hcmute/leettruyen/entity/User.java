@@ -112,12 +112,4 @@ public class User extends BaseEntity implements UserDetails {
         }
         return roles;
     }
-//    public void addParagraph(Paragraph paragraph) {
-//        this.paragraphs.add(paragraph);
-//        paragraph.getUsers().add(this);
-//    }
-//    public void removeParagraph(Paragraph paragraph) {
-//        this.paragraphs.remove(paragraph);
-//        paragraph.getUsers().remove(this);
-//    }
 }
