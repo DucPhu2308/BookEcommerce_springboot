@@ -42,6 +42,7 @@ public class UserServiceImpl implements IUserService {
         User user = User.builder()
                 .displayName(userDto.getDisplayName())
                 .email(userDto.getEmail())
+                .active(true)
                 .build();
         Role role = roleRepository.findById(2)
                 .orElseThrow(()-> new RuntimeException("Role not found"));

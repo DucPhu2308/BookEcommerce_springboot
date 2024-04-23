@@ -58,6 +58,7 @@ public class BookServiceImpl implements IBookService {
         book.setGenres(genres);
         book.setPublicDate(LocalDateTime.now());
         book.setUserOwn(founduser);
+        book.setActive(true);
         bookRepository.save(book);
         return modelMapper.map(book, BookResponse.class);
     }
