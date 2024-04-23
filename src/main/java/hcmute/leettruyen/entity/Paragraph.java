@@ -3,6 +3,7 @@ package hcmute.leettruyen.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Paragraph {
     @Id
     @GeneratedValue
@@ -22,12 +24,7 @@ public class Paragraph {
     @JoinColumn(name = "chapter_id")
     @JsonBackReference
     private Chapter chapter;
-    @ManyToMany
-    @JoinTable(
-            name = "book_mark",
-            joinColumns = @JoinColumn(name = "paragraph_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @ManyToMany(mappedBy = "bookmarks")
     @JsonBackReference
-    private List<User> users;
+    private List<User> users_book_mark;
 }

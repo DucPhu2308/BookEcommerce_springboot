@@ -49,8 +49,13 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<Comment> comments;
-    @ManyToMany(mappedBy = "users")
-    private List<Paragraph> paragraphs;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "mark",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "paragraph_id")
+    )
+    private List<Paragraph> bookmarks;
     @ManyToMany(mappedBy = "users_follow")
     private List<Book> books;
     @OneToMany(mappedBy = "userOwn")
@@ -107,4 +112,12 @@ public class User extends BaseEntity implements UserDetails {
         }
         return roles;
     }
+//    public void addParagraph(Paragraph paragraph) {
+//        this.paragraphs.add(paragraph);
+//        paragraph.getUsers().add(this);
+//    }
+//    public void removeParagraph(Paragraph paragraph) {
+//        this.paragraphs.remove(paragraph);
+//        paragraph.getUsers().remove(this);
+//    }
 }

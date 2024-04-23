@@ -4,12 +4,15 @@ import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.component.JwtTokenUtil;
 import hcmute.leettruyen.dto.UserDto;
 import hcmute.leettruyen.entity.Book;
+import hcmute.leettruyen.entity.Paragraph;
 import hcmute.leettruyen.entity.Role;
 import hcmute.leettruyen.entity.User;
 import hcmute.leettruyen.repository.BookRepository;
+import hcmute.leettruyen.repository.ParagraphRepository;
 import hcmute.leettruyen.repository.RoleRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.BookResponse;
+import hcmute.leettruyen.response.ParagraphResponse;
 import hcmute.leettruyen.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,6 +37,7 @@ public class UserServiceImpl implements IUserService {
     private final JwtTokenUtil jwtTokenUtil;
     private final ModelMapper modelMapper;
     private final Extractor extractor;
+    private final ParagraphRepository paragraphRepository;
     @Override
     public User createUser(UserDto userDto) {
         if(userRepository.existsByEmail(userDto.getEmail())){
@@ -82,10 +86,15 @@ public class UserServiceImpl implements IUserService {
         User user = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()->new RuntimeException("User not found"));
         List<User> users = book.getUsers_follow();
-        users.add(user);
+        if(users.contains(user)){
+            users.remove(user);
+        }else {
+            users.add(user);
+        }
         book.setUsers_follow(users);
         bookRepository.save(book);
     }
+
 
     @Override
     public List<BookResponse> getFollowBook() {
@@ -94,6 +103,32 @@ public class UserServiceImpl implements IUserService {
         List<Book> books = user.getBooks();
         return books.stream().map(
                 mappers -> modelMapper.map(mappers,BookResponse.class)
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public void markParagraph(Integer paragraphId) {
+        Paragraph paragraph = paragraphRepository.findById(paragraphId)
+                .orElseThrow(()->new RuntimeException("Paragraph not found"));
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<Paragraph> paragraphs = user.getBookmarks();
+        if(paragraphs.contains(paragraph)){
+            paragraphs.remove(paragraph);
+        }else {
+            paragraphs.add(paragraph);
+        }
+        user.setBookmarks(paragraphs);
+        userRepository.save(user);
+    }
+
+    @Override
+    public List<ParagraphResponse> getMarkParagraph() {
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<Paragraph> paragraphs = user.getBookmarks();
+        return paragraphs.stream().map(
+                mappers -> modelMapper.map(mappers,ParagraphResponse.class)
         ).collect(Collectors.toList());
     }
 }
