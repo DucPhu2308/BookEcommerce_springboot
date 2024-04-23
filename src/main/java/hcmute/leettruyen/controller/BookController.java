@@ -40,6 +40,18 @@ public class BookController {
                 new ResponseObject("ok",
                         "",responseData));
     }
+
+    @GetMapping("list-by-date")
+    public ResponseEntity<ResponseObject> getBooksSortByDate(
+            @RequestParam(name = "num", defaultValue = "10") int num
+    ){
+        int numInt = Integer.parseInt(String.valueOf(num));
+        List<BookResponse> bookResponses = bookService.getBooksSortByDate(numInt);
+        return ResponseEntity.ok(
+                new ResponseObject("ok",
+                        "",bookResponses));
+
+    }
     @PostMapping("")
     public ResponseEntity<ResponseObject> createBook(
             @Valid @RequestBody BookDto bookDto,

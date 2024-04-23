@@ -2,6 +2,9 @@ package hcmute.leettruyen.service;
 
 import hcmute.leettruyen.dto.BookDto;
 import hcmute.leettruyen.response.BookResponse;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -12,4 +15,5 @@ public interface IBookService {
     void deleteBook(Integer id);
     void hideBook(Integer id);
     BookResponse getBookById(Integer id) throws Exception;
+    public List<BookResponse> getBooksSortByDate(Integer num);
 }

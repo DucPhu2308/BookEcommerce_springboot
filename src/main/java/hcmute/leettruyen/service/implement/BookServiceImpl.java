@@ -92,4 +92,12 @@ public class BookServiceImpl implements IBookService {
                 .orElseThrow(()-> new Exception("Cannot find book"));
         return modelMapper.map(book,BookResponse.class);
     }
+
+    @Override
+    public List<BookResponse> getBooksSortByDate(Integer num){
+        List<Book> books = bookRepository.findTopNByOrderByPublicDateDesc(num);
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
 }
