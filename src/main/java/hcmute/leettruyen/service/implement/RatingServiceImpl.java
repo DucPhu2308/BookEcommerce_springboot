@@ -1,5 +1,6 @@
 package hcmute.leettruyen.service.implement;
 
+import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.dto.RatingDto;
 import hcmute.leettruyen.entity.Book;
 import hcmute.leettruyen.entity.Rating;
@@ -23,11 +24,12 @@ public class RatingServiceImpl implements IRatingService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final Extractor extractor;
     @Override
     public RatingResponse createRating(RatingDto ratingDto) throws Exception {
         Book foundBook = bookRepository.findById(ratingDto.getBook())
                 .orElseThrow(()-> new Exception("Cannot find book"));
-        User foundUser = userRepository.findById(ratingDto.getUser())
+        User foundUser = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()-> new Exception("Cannot find user"));
         if(ratingRepository.existsByBookAndUser(foundBook,foundUser)){
             throw new Exception("User rated");

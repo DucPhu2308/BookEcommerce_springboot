@@ -1,13 +1,18 @@
 package hcmute.leettruyen.service.implement;
 
+import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.component.JwtTokenUtil;
 import hcmute.leettruyen.dto.UserDto;
+import hcmute.leettruyen.entity.Book;
 import hcmute.leettruyen.entity.Role;
 import hcmute.leettruyen.entity.User;
+import hcmute.leettruyen.repository.BookRepository;
 import hcmute.leettruyen.repository.RoleRepository;
 import hcmute.leettruyen.repository.UserRepository;
+import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +29,11 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BookRepository bookRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final ModelMapper modelMapper;
+    private final Extractor extractor;
     @Override
     public User createUser(UserDto userDto) {
         if(userRepository.existsByEmail(userDto.getEmail())){
@@ -63,5 +72,27 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void followBook(Integer bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()->new RuntimeException("Book not found"));
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<User> users = book.getUsers_follow();
+        users.add(user);
+        book.setUsers_follow(users);
+        bookRepository.save(book);
+    }
+
+    @Override
+    public List<BookResponse> getFollowBook() {
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<Book> books = user.getBooks();
+        return books.stream().map(
+                mappers -> modelMapper.map(mappers,BookResponse.class)
+        ).collect(Collectors.toList());
     }
 }

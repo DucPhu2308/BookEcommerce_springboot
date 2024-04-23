@@ -11,5 +11,4 @@ public class RatingDto {
     private Float star;
     private String content;
     private Integer book;
-    private Integer user;
 }

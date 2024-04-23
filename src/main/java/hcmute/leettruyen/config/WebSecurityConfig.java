@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
+@EnableGlobalAuthentication
 public class WebSecurityConfig {
     private final JwtTokenFilter jwtTokenFilter;
     @Bean
@@ -23,7 +27,8 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/login",
-                                "/api/v1/auth/register")
+                                "/api/v1/auth/register",
+                                "/api/v1/upload/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/book/**").permitAll()
@@ -45,6 +50,8 @@ public class WebSecurityConfig {
                                 "/api/v1/genre/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/book/**").hasAnyRole("USER")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/v1/book/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/chapter/**").hasAnyRole("USER")
                         .requestMatchers(HttpMethod.POST,
