@@ -33,15 +33,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/book/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
-                                "/api/v1/author/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,
                                 "/api/v1/genre/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/v1/author/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,
-                                "/api/v1/author/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,
-                                "/api/v1/author/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/genre/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,

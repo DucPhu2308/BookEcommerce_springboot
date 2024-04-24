@@ -16,7 +16,6 @@ public class BookResponse {
     private String coverImage;
     private LocalDateTime publicDate;
     private List<GenreResponse> genres;
-    private List<AuthorResponse> authors;
     private List<RatingResponse> ratings;
     private List<ChapterResponse> chapters;
     private List<UserResponse> users_follow;

@@ -1,6 +1,5 @@
 package hcmute.leettruyen.config;
 
-import hcmute.leettruyen.repository.AuthorRepository;
 import hcmute.leettruyen.repository.GenreRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigTestData {
     @Bean
     CommandLineRunner commandLineRunner(
-            AuthorRepository authorRepository,
             GenreRepository genreRepository,
             UserRepository userRepository){
         return args -> {

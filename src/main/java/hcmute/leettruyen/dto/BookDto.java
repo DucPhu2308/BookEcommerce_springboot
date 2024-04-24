@@ -18,5 +18,4 @@ public class BookDto {
     private String description;
     private String coverImage;
     private List<Integer> genresDto;
-    private List<Integer> authorsDto;
 }

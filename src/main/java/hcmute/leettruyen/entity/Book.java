@@ -32,14 +32,6 @@ public class Book extends BaseEntity{
     )
     @JsonManagedReference
     private List<Genre> genres;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "book_author",
-            joinColumns =@JoinColumn(name = "book_id"),
-            inverseJoinColumns =@JoinColumn(name = "author_id")
-    )
-    @JsonManagedReference
-    private List<Author> authors;
     @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Rating> ratings;
