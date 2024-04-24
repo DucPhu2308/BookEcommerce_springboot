@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenreResponse {
+    private Integer id;
     private String name;
     private String color;
 }
