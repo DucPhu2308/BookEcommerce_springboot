@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentResponse {
+    private int id;
     private String content;
 //    private CommentResponse parent;
     private List<CommentResponse> children;

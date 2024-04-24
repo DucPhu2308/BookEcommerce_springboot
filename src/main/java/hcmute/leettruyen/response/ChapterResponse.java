@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChapterResponse {
+    private int id;
     private String title;
     private int price;
     private int index;
