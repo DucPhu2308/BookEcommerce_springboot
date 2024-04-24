@@ -22,6 +22,7 @@ public class Chapter extends BaseEntity{
     private String title;
     private int price;
     private int index;
+    private Boolean active;
     @ManyToOne
     @JoinColumn(name = "book_id")
     @JsonBackReference

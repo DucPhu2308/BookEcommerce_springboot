@@ -30,6 +30,7 @@ public class ChapterServiceImpl implements IChapterService {
                 .addMappings(mapper -> mapper.skip(Chapter::setId));
         modelMapper.map(chapterDto, chapter);
         chapter.setBook(foundBook);
+        chapter.setActive(true);
         chapterRepository.save(chapter);
         return modelMapper.map(chapter,ChapterResponse.class);
     }

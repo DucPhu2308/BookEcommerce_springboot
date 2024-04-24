@@ -25,12 +25,37 @@ public class UserController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @PostMapping("/markParagraph/{id}")
+    public ResponseEntity<ResponseObject> markParagraph(
+            @PathVariable Integer id
+    ){
+        try {
+            userService.markParagraph(id);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",""));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @GetMapping("/follow/book")
     public ResponseEntity<ResponseObject> getFollowBook(){
         try {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",userService.getFollowBook()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/mark/paragraph")
+    public ResponseEntity<ResponseObject> getMarkParagraph(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.getMarkParagraph()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

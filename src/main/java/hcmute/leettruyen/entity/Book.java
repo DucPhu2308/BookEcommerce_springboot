@@ -23,10 +23,11 @@ public class Book extends BaseEntity{
     private Float avgRating;
     private String coverImage;
     private LocalDateTime publicDate;
+    private Boolean active;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "book_genre",
-            joinColumns =@JoinColumn(name = "book_id"),
+            joinColumns =@JoinColumn(name = " book_id"),
             inverseJoinColumns =@JoinColumn(name = "genre_id")
     )
     @JsonManagedReference
@@ -35,7 +36,7 @@ public class Book extends BaseEntity{
     @JoinTable(
             name = "book_author",
             joinColumns =@JoinColumn(name = "book_id"),
-            inverseJoinColumns =@JoinColumn(name = "genre_id")
+            inverseJoinColumns =@JoinColumn(name = "author_id")
     )
     @JsonManagedReference
     private List<Author> authors;
