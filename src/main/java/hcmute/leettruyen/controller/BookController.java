@@ -88,6 +88,21 @@ public class BookController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @PutMapping("/{id}/hide")
+    public ResponseEntity<ResponseObject> hideBook(
+            @PathVariable Integer id
+    ){
+        try {
+            bookService.hideBook(id);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            ""));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteBook(
             @PathVariable Integer id

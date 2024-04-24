@@ -78,7 +78,10 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public void hideBook(Integer id) {
-
+        Book book = bookRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Cannot find book"));
+        book.setActive(false);
+        bookRepository.save(book);
     }
 
     @Override
