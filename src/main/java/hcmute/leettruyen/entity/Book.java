@@ -36,7 +36,7 @@ public class Book extends BaseEntity{
     @JoinTable(
             name = "book_author",
             joinColumns =@JoinColumn(name = "book_id"),
-            inverseJoinColumns =@JoinColumn(name = "genre_id")
+            inverseJoinColumns =@JoinColumn(name = "author_id")
     )
     @JsonManagedReference
     private List<Author> authors;

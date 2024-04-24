@@ -1,8 +1,10 @@
 package hcmute.leettruyen.service;
 
 import hcmute.leettruyen.dto.UserDto;
+import hcmute.leettruyen.entity.Paragraph;
 import hcmute.leettruyen.entity.User;
 import hcmute.leettruyen.response.BookResponse;
+import hcmute.leettruyen.response.ParagraphResponse;
 
 import java.util.List;
 
@@ -13,4 +15,6 @@ public interface IUserService {
     Boolean existsByEmail(String email);
     void followBook(Integer bookId);
     List<BookResponse> getFollowBook();
+    void markParagraph(Integer paragraphId);
+    List<ParagraphResponse> getMarkParagraph();
 }
