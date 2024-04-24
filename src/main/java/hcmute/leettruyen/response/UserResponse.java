@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserResponse {
+    private int id;
     private String email;
     private String displayName;
     private int coin;
