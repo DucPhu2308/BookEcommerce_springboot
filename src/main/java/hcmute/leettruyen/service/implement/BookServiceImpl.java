@@ -42,6 +42,14 @@ public class BookServiceImpl implements IBookService {
     }
 
     @Override
+    public List<BookResponse> getAllBook() {
+        return bookRepository.findAll()
+                .stream()
+                .map(book -> modelMapper.map(book, BookResponse.class))
+                .toList();
+    }
+
+    @Override
     public BookResponse createBook(BookDto bookDto) throws Exception {
         List<Genre> genres = genreRepository.findAllById(bookDto.getGenresDto());
         User founduser = userRepository.findById(extractor.getUserIdFromToken())

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 
 public interface IBookService {
     Page<BookResponse> getAllBook(PageRequest pageRequest);
+    List<BookResponse> getAllBook();
     BookResponse createBook(BookDto bookDto) throws Exception;
     BookResponse updateBook(Integer id, BookDto bookDto) throws Exception;
     void deleteBook(Integer id);

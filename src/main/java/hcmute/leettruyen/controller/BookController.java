@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,22 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BookController {
     private final IBookService bookService;
+    @GetMapping("/all")
+    public ResponseEntity<ResponseObject> getAllBook(){
+        try {
+            List<BookResponse> bookResponses = bookService.getAllBook();
+            List<BookResponse> sortedBookResponses = bookResponses.stream()
+                    .sorted(Comparator.comparing(BookResponse::getUpdatedAt))
+                    .toList();
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",sortedBookResponses
+                            ));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @GetMapping("")
     public ResponseEntity<ResponseObject> getBook(
             @RequestParam("page") int page
