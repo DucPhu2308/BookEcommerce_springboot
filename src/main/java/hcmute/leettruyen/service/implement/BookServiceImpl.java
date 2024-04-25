@@ -104,4 +104,14 @@ public class BookServiceImpl implements IBookService {
                 .orElseThrow(()-> new Exception("Cannot find book"));
         return book.getUserOwn().getEmail();
     }
+
+    @Override
+    public List<BookResponse> getBookByUser(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("Cannot find user"));
+        List<Book> books = user.getOwn();
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
 }

@@ -90,4 +90,19 @@ public class GenreController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteGenre(
+            @PathVariable Integer id
+    ){
+        try {
+            genreService.deleteGenre(id);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            ""));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
 }

@@ -63,10 +63,10 @@ public class User extends BaseEntity implements UserDetails {
     private List<Book> own;
     @ManyToMany(mappedBy = "subscribing")
     private List<User> subscribed;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_subscribe",
-            joinColumns = @JoinColumn(name = "subscribing_id"),
+            joinColumns = @JoinColumn(name = "subscriber_id"),
             inverseJoinColumns = @JoinColumn(name = "subscribed_id")
     )
     private List<User> subscribing;

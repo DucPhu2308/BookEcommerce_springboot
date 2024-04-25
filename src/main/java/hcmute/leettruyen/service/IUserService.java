@@ -17,4 +17,5 @@ public interface IUserService {
     List<BookResponse> getFollowBook();
     void markParagraph(Integer paragraphId);
     List<ParagraphResponse> getMarkParagraph();
+    void followUser(Integer userId);
 }

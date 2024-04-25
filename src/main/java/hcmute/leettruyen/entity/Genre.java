@@ -24,4 +24,10 @@ public class Genre {
     @ManyToMany(mappedBy = "genres")
     @JsonBackReference
     private List<Book> books;
+    @PreRemove
+    private void removeBookAssociations() {
+        for (Book book: this.books) {
+            book.getGenres().remove(this);
+        }
+    }
 }

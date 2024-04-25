@@ -15,6 +15,7 @@ public interface IBookService {
     void deleteBook(Integer id);
     void hideBook(Integer id);
     BookResponse getBookById(Integer id) throws Exception;
-    public List<BookResponse> getBooksSortByDate(Integer num);
+    List<BookResponse> getBooksSortByDate(Integer num);
     String getEmailByBook(Integer id) throws Exception;
+    List<BookResponse> getBookByUser(Integer userId);
 }

@@ -53,7 +53,7 @@ public class GenreServiceImpl implements IGenreService {
 
     @Override
     public void deleteGenre(Integer id) {
-
+        genreRepository.deleteById(id);
     }
 
     @Override

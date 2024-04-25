@@ -142,4 +142,18 @@ public class BookController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @GetMapping("/{id}/user")
+    public ResponseEntity<ResponseObject> getBookByUser(
+            @PathVariable Integer id
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.getBookByUser(id)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
 }

@@ -131,4 +131,20 @@ public class UserServiceImpl implements IUserService {
                 mappers -> modelMapper.map(mappers,ParagraphResponse.class)
         ).collect(Collectors.toList());
     }
+
+    @Override
+    public void followUser(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new RuntimeException("User not found"));
+        User currentUser = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<User> users = currentUser.getSubscribing();
+        if(users.contains(user)){
+            users.remove(user);
+        }else {
+            users.add(user);
+        }
+        currentUser.setSubscribing(users);
+        userRepository.save(currentUser);
+    }
 }
