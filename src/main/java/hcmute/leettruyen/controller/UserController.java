@@ -1,7 +1,9 @@
 package hcmute.leettruyen.controller;
 
+import hcmute.leettruyen.dto.UpdateInfoDto;
 import hcmute.leettruyen.entity.ResponseObject;
 import hcmute.leettruyen.service.IUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +72,33 @@ public class UserController {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",userService.getMarkParagraph()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @PutMapping("/update")
+    public ResponseEntity<ResponseObject> update(
+            @Valid @RequestBody UpdateInfoDto updateInfoDto
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.updateUserInfo(updateInfoDto)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @PutMapping("/change-password")
+    public ResponseEntity<ResponseObject> changePassword(
+            @RequestParam String password
+    ){
+        try {
+            userService.changePassword(password);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",""));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
