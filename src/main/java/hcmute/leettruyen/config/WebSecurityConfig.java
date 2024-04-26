@@ -34,6 +34,8 @@ public class WebSecurityConfig {
                                 "/api/v1/book/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/genre/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "api/v1/comment/**").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/genre/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,
@@ -50,6 +52,8 @@ public class WebSecurityConfig {
                                 "/api/v1/comment/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/v1/comment/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/payment/**").hasAnyRole("USER")
                         .anyRequest().authenticated());
         return httpSecurity.build();
     }
