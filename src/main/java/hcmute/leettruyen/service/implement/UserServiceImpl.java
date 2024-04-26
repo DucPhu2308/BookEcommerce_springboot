@@ -2,6 +2,7 @@ package hcmute.leettruyen.service.implement;
 
 import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.component.JwtTokenUtil;
+import hcmute.leettruyen.dto.UpdateInfoDto;
 import hcmute.leettruyen.dto.UserDto;
 import hcmute.leettruyen.entity.Book;
 import hcmute.leettruyen.entity.Paragraph;
@@ -13,6 +14,7 @@ import hcmute.leettruyen.repository.RoleRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.ParagraphResponse;
+import hcmute.leettruyen.response.UserResponse;
 import hcmute.leettruyen.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -54,6 +56,17 @@ public class UserServiceImpl implements IUserService {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserResponse updateUserInfo(UpdateInfoDto userDto) {
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        user.setDisplayName(userDto.getDisplayName());
+        user.setIntroduction(userDto.getIntroduction());
+        user.setAvatar(userDto.getAvatar());
+        userRepository.save(user);
+        return modelMapper.map(user,UserResponse.class);
     }
 
     @Override
@@ -146,5 +159,14 @@ public class UserServiceImpl implements IUserService {
         }
         currentUser.setSubscribing(users);
         userRepository.save(currentUser);
+    }
+
+    @Override
+    public void changePassword(String password) {
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        String encodedPassword = passwordEncoder.encode(password);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
     }
 }
