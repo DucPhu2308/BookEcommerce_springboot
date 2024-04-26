@@ -64,7 +64,8 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(()->new RuntimeException("User not found"));
         user.setDisplayName(userDto.getDisplayName());
         user.setIntroduction(userDto.getIntroduction());
-        user.setAvatar(userDto.getAvatar());
+        user.setEmail(userDto.getEmail());
+        user.setCoin(userDto.getCoin());
         userRepository.save(user);
         return modelMapper.map(user,UserResponse.class);
     }

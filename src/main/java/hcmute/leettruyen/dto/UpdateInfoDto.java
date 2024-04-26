@@ -12,5 +12,6 @@ public class UpdateInfoDto {
     @NotBlank(message = "display is required")
     private String displayName;
     private String introduction;
-    private String avatar;
+    private String email;
+    private int coin;
 }
