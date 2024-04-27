@@ -32,6 +32,21 @@ public class ChapterController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getChapterById(
+            @PathVariable Integer id
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            chapterService.getChapterById(id)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @PostMapping("")
     public ResponseEntity<ResponseObject> createChapter(
             @Valid @RequestBody ChapterDto chapterDto,

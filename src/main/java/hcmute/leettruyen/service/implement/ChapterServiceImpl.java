@@ -36,6 +36,13 @@ public class ChapterServiceImpl implements IChapterService {
     }
 
     @Override
+    public ChapterResponse getChapterById(Integer id) throws Exception {
+        Chapter foundChapter = chapterRepository.findById(id)
+                .orElseThrow(()-> new Exception("Cannot find chapter"));
+        return modelMapper.map(foundChapter, ChapterResponse.class);
+    }
+
+    @Override
     public ChapterResponse updateChapter(Integer id, ChapterDto chapterDto) throws Exception {
         Book foundBook = bookRepository.findById(chapterDto.getBook())
                 .orElseThrow(()-> new Exception("Cannot find book"));

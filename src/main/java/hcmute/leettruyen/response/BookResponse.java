@@ -15,6 +15,7 @@ public class BookResponse {
     private String description;
     private Float avgRating;
     private String coverImage;
+    private Boolean active;
     private LocalDateTime publicDate;
     private List<GenreResponse> genres;
     private List<RatingResponse> ratings;
