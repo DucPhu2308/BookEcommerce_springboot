@@ -2,6 +2,7 @@ package hcmute.leettruyen.controller;
 
 import hcmute.leettruyen.dto.ChapterDto;
 import hcmute.leettruyen.entity.ResponseObject;
+import hcmute.leettruyen.response.ChapterResponse;
 import hcmute.leettruyen.service.IChapterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,31 @@ public class ChapterController {
     public ResponseEntity<ResponseObject> getChapterByBook(
             @PathVariable Integer id
     ){
+
+        try {
+            // sort chapter by index
+            List<ChapterResponse> chapterResponses = chapterService.chapterByBook(id).stream()
+                    .sorted((c1,c2)->c1.getIndex()-c2.getIndex())
+                    .toList();
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            chapterResponses));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getChapterById(
+            @PathVariable Integer id
+    ){
         try {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            chapterService.chapterByBook(id)));
+                            chapterService.getChapterById(id)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

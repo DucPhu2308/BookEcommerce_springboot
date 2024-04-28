@@ -14,6 +14,7 @@ public class ChapterResponse {
     private String title;
     private int price;
     private int index;
+    private Boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int bookId;
