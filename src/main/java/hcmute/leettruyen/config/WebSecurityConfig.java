@@ -36,6 +36,8 @@ public class WebSecurityConfig {
                                 "/api/v1/genre/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "api/v1/comment/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/chapter/**").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/v1/genre/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,
