@@ -78,6 +78,28 @@ public class UserController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @GetMapping("/following")
+    public ResponseEntity<ResponseObject> getFollowingUser(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.getFollowingUser()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/followed")
+    public ResponseEntity<ResponseObject> getFollowedUser(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.getFollowedUser()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @PutMapping("/update")
     public ResponseEntity<ResponseObject> update(
             @Valid @RequestBody UpdateInfoDto updateInfoDto

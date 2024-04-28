@@ -20,5 +20,7 @@ public interface IUserService {
     void markParagraph(Integer paragraphId);
     List<ParagraphResponse> getMarkParagraph();
     void followUser(Integer userId);
+    List<UserResponse> getFollowingUser();
+    List<UserResponse> getFollowedUser();
     void changePassword(String password);
 }

@@ -162,6 +162,26 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public List<UserResponse> getFollowingUser() {
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<User> users = user.getSubscribing();
+        return users.stream().map(
+                mappers -> modelMapper.map(mappers,UserResponse.class)
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserResponse> getFollowedUser() {
+        User user = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        List<User> users = user.getSubscribed();
+        return users.stream().map(
+                mappers -> modelMapper.map(mappers,UserResponse.class)
+        ).collect(Collectors.toList());
+    }
+
+    @Override
     public void changePassword(String password) {
         User user = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()->new RuntimeException("User not found"));
