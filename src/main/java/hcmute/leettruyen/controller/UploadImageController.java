@@ -34,24 +34,28 @@ public class UploadImageController {
         }
         String uniqueFileName = UUID.randomUUID()+"";
         InputStream inputStream = file.getInputStream();
-        switch (id){
-            case 1:
-                firebaseStorageService.uploadFile("Book",inputStream,uniqueFileName);
-                break;
-            case 2:
-                firebaseStorageService.uploadFile("Chapter",inputStream,uniqueFileName);
-                break;
-            case 3:
-                firebaseStorageService.uploadFile("Paragraph",inputStream,uniqueFileName);
-                break;
-            default:
-                return ResponseEntity.badRequest().body(
-                        new ResponseObject("failed","invalid id","")
-                );
+        try {
+            switch (id){
+                case 1:
+                    return saveImage("User",inputStream,uniqueFileName);
+                case 2:
+                    return saveImage("Book",inputStream,uniqueFileName);
+                case 3:
+                    return saveImage("Paragraph",inputStream,uniqueFileName);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("failed",e.getMessage(),""));
         }
-        inputStream.close();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseObject("failed","invalid id",""));
+    }
+    public ResponseEntity<ResponseObject> saveImage(String folderName, InputStream inputStream, String uniqueFileName){
+        firebaseStorageService.uploadFile(folderName,inputStream,uniqueFileName);
+        String url = "https://firebasestorage.googleapis.com/v0/b/web-springboot-1a3ab.appspot.com/o/LeetTruyen%2F"
+                +folderName+"%2F"+uniqueFileName+"?alt=media";
         return ResponseEntity.ok(
-                new ResponseObject("Success","upload image success",uniqueFileName)
+                new ResponseObject("Success","upload image success",url)
         );
     }
 }
