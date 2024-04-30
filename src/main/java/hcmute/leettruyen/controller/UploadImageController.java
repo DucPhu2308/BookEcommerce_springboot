@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -50,26 +51,22 @@ public class UploadImageController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseObject("failed","invalid id",""));
     }
-    @DeleteMapping("/{type}/{uniqueFileName}")
+    @DeleteMapping("")
     public ResponseEntity<ResponseObject> deleteImage(
-            @PathVariable Integer type,
-            @PathVariable String uniqueFileName
+            @RequestParam("url") String url
     ){
         try {
-            switch (type){
-                case 1:
-                    return deleteImage("User",uniqueFileName);
-                case 2:
-                    return deleteImage("Book",uniqueFileName);
-                case 3:
-                    return deleteImage("Paragraph",uniqueFileName);
-            }
+            URI uri = new URI(url);
+            String path = uri.getPath();
+
+            String[] parts = path.split("/");
+            String folder = parts[6];
+            String file_name = parts[7];
+            return deleteImage(folder,file_name);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("failed",e.getMessage(),""));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseObject("failed","invalid id",""));
     }
     public ResponseEntity<ResponseObject> saveImage(String folderName, InputStream inputStream, String uniqueFileName){
         firebaseStorageService.uploadFile(folderName,inputStream,uniqueFileName);
