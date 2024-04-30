@@ -50,12 +50,39 @@ public class UploadImageController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseObject("failed","invalid id",""));
     }
+    @DeleteMapping("/{type}/{uniqueFileName}")
+    public ResponseEntity<ResponseObject> deleteImage(
+            @PathVariable Integer type,
+            @PathVariable String uniqueFileName
+    ){
+        try {
+            switch (type){
+                case 1:
+                    return deleteImage("User",uniqueFileName);
+                case 2:
+                    return deleteImage("Book",uniqueFileName);
+                case 3:
+                    return deleteImage("Paragraph",uniqueFileName);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("failed",e.getMessage(),""));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseObject("failed","invalid id",""));
+    }
     public ResponseEntity<ResponseObject> saveImage(String folderName, InputStream inputStream, String uniqueFileName){
         firebaseStorageService.uploadFile(folderName,inputStream,uniqueFileName);
         String url = "https://firebasestorage.googleapis.com/v0/b/web-springboot-1a3ab.appspot.com/o/LeetTruyen%2F"
                 +folderName+"%2F"+uniqueFileName+"?alt=media";
         return ResponseEntity.ok(
                 new ResponseObject("Success","upload image success",url)
+        );
+    }
+    public ResponseEntity<ResponseObject> deleteImage(String folderName, String uniqueFileName){
+        firebaseStorageService.deleteFile(folderName,uniqueFileName);
+        return ResponseEntity.ok(
+                new ResponseObject("Success","delete image success","")
         );
     }
 }
