@@ -19,10 +19,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UploadImageController {
     private final FirebaseStorageService firebaseStorageService;
-    @PostMapping(value = "/{id}"
+    @PostMapping(value = "/{type}"
             , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseObject> uploadImages(
-            @PathVariable Integer id,
+            @PathVariable Integer type,
             @ModelAttribute("file") MultipartFile file ) throws IOException {
         if (file.getSize() > 10 * 1024 * 1024) {
             return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
@@ -35,7 +35,7 @@ public class UploadImageController {
         String uniqueFileName = UUID.randomUUID()+"";
         InputStream inputStream = file.getInputStream();
         try {
-            switch (id){
+            switch (type){
                 case 1:
                     return saveImage("User",inputStream,uniqueFileName);
                 case 2:

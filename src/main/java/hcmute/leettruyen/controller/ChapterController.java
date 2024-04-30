@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class ChapterController {
         try {
             // sort chapter by index
             List<ChapterResponse> chapterResponses = chapterService.chapterByBook(id).stream()
-                    .sorted((c1,c2)->c1.getIndex()-c2.getIndex())
+                    .sorted(Comparator.comparingInt(ChapterResponse::getIndex))
                     .toList();
             return ResponseEntity.ok(
                     new ResponseObject("ok",
