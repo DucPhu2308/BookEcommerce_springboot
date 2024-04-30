@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchasedHistory {
+public class PurchasedHistoryDto {
     private int coin;
     private Integer chapter;
     private Integer user;
