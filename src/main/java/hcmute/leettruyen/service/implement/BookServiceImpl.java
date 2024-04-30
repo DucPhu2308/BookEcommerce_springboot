@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -122,4 +123,31 @@ public class BookServiceImpl implements IBookService {
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
+
+    @Override
+    public List<BookResponse> searchBook(String keyword) {
+        List<Book> books = bookRepository.findByTitleContaining(keyword);
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
+
+    @Override
+    public List<BookResponse> advancedSearch(String title, List<Integer> genres) {
+        List<Genre> genreList = genreRepository.findAllById(genres);
+        List<Book> books = bookRepository.findByTitleContaining(title);
+        return books.stream()
+                .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList))
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
+
+    @Override
+    public List<BookResponse> getBestRateBook() {
+        List<Book> books = bookRepository.findTopNByOrderByAvgRatingDesc(10);
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
+
 }
