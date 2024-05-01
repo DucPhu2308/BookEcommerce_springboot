@@ -144,7 +144,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public List<BookResponse> getBestRateBook() {
-        List<Book> books = bookRepository.findTopNByOrderByAvgRatingDesc(10);
+        List<Book> books = bookRepository.findTopByOrderByAvgRatingDesc();
         return books.stream()
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();

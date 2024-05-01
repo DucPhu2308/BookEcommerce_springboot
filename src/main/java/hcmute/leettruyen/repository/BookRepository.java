@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     @Query("SELECT AVG(r.star) FROM Rating r WHERE r.book = :book")
     Float findAverageRatingByBook(@Param("book") Book book);
     List<Book> findByTitleContaining(String title);
-    List<Book> findTopNByOrderByAvgRatingDesc(int num);
+    List<Book> findTopByOrderByAvgRatingDesc();
     // find <num> books sort by date with
     // <num> is the number of books to find
     @Query("SELECT b FROM Book b ORDER BY b.publicDate DESC LIMIT:num")
