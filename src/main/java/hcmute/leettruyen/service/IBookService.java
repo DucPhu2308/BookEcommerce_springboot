@@ -19,4 +19,7 @@ public interface IBookService {
     List<BookResponse> getBooksSortByDate(Integer num);
     String getEmailByBook(Integer id) throws Exception;
     List<BookResponse> getBookByUser(Integer userId);
+    List<BookResponse> searchBook(String keyword);
+    List<BookResponse> advancedSearch(String title, List<Integer> genres);
+    List<BookResponse> getBestRateBook();
 }

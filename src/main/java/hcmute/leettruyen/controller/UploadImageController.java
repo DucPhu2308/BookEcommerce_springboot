@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -19,10 +20,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UploadImageController {
     private final FirebaseStorageService firebaseStorageService;
-    @PostMapping(value = "/{id}"
+    @PostMapping(value = "/{type}"
             , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseObject> uploadImages(
-            @PathVariable Integer id,
+            @PathVariable Integer type,
             @ModelAttribute("file") MultipartFile file ) throws IOException {
         if (file.getSize() > 10 * 1024 * 1024) {
             return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
@@ -34,24 +35,51 @@ public class UploadImageController {
         }
         String uniqueFileName = UUID.randomUUID()+"";
         InputStream inputStream = file.getInputStream();
-        switch (id){
-            case 1:
-                firebaseStorageService.uploadFile("Book",inputStream,uniqueFileName);
-                break;
-            case 2:
-                firebaseStorageService.uploadFile("Chapter",inputStream,uniqueFileName);
-                break;
-            case 3:
-                firebaseStorageService.uploadFile("Paragraph",inputStream,uniqueFileName);
-                break;
-            default:
-                return ResponseEntity.badRequest().body(
-                        new ResponseObject("failed","invalid id","")
-                );
+        try {
+            switch (type){
+                case 1:
+                    return saveImage("User",inputStream,uniqueFileName);
+                case 2:
+                    return saveImage("Book",inputStream,uniqueFileName);
+                case 3:
+                    return saveImage("Paragraph",inputStream,uniqueFileName);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("failed",e.getMessage(),""));
         }
-        inputStream.close();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResponseObject("failed","invalid id",""));
+    }
+    @DeleteMapping("")
+    public ResponseEntity<ResponseObject> deleteImage(
+            @RequestParam("url") String url
+    ){
+        try {
+            URI uri = new URI(url);
+            String path = uri.getPath();
+
+            String[] parts = path.split("/");
+            String folder = parts[6];
+            String file_name = parts[7];
+            return deleteImage(folder,file_name);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("failed",e.getMessage(),""));
+        }
+    }
+    public ResponseEntity<ResponseObject> saveImage(String folderName, InputStream inputStream, String uniqueFileName){
+        firebaseStorageService.uploadFile(folderName,inputStream,uniqueFileName);
+        String url = "https://firebasestorage.googleapis.com/v0/b/web-springboot-1a3ab.appspot.com/o/LeetTruyen%2F"
+                +folderName+"%2F"+uniqueFileName+"?alt=media";
         return ResponseEntity.ok(
-                new ResponseObject("Success","upload image success",uniqueFileName)
+                new ResponseObject("Success","upload image success",url)
+        );
+    }
+    public ResponseEntity<ResponseObject> deleteImage(String folderName, String uniqueFileName){
+        firebaseStorageService.deleteFile(folderName,uniqueFileName);
+        return ResponseEntity.ok(
+                new ResponseObject("Success","delete image success","")
         );
     }
 }

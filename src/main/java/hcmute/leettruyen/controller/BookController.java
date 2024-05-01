@@ -173,4 +173,45 @@ public class BookController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @GetMapping("/search")
+    public ResponseEntity<ResponseObject> searchBook(
+            @RequestParam("keyword") String keyword
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.searchBook(keyword)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/advanced-search")
+    public ResponseEntity<ResponseObject> advancedSearch(
+            @RequestParam("title") String title,
+            @RequestParam("genre") List<Integer> genre
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.advancedSearch(title,genre)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/best-rate")
+    public ResponseEntity<ResponseObject> getBestRateBook(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.getBestRateBook()));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
 }

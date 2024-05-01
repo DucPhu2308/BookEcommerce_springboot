@@ -18,6 +18,7 @@ public class Paragraph {
     @Id
     @GeneratedValue
     private Integer id;
+    @Column(length = 1000)
     private String content;
     private int index;
     @ManyToOne
