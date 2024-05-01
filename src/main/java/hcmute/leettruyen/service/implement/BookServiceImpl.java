@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,7 @@ public class BookServiceImpl implements IBookService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final Extractor extractor;
+    private final FirebaseStorageService firebaseStorageService;
 
     @Override
     public Page<BookResponse> getAllBook(PageRequest pageRequest) {
@@ -71,10 +73,22 @@ public class BookServiceImpl implements IBookService {
     public BookResponse updateBook(Integer id, BookDto bookDto) throws Exception {
         Book foundBook = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));
+        if (bookDto.getCoverImage() != null && !bookDto.getCoverImage().equals(foundBook.getCoverImage())){
+            String url = foundBook.getCoverImage();
+            URI uri = new URI(url);
+            String path = uri.getPath();
+
+            String[] parts = path.split("/");
+            String folder = parts[6];
+            String file_name = parts[7];
+
+            firebaseStorageService.deleteFile(folder,file_name);
+
+            foundBook.setCoverImage(bookDto.getCoverImage());
+        }
         List<Genre> genres = genreRepository.findAllById(bookDto.getGenresDto());
         foundBook.setTitle(bookDto.getTitle());
         foundBook.setDescription(bookDto.getDescription());
-        foundBook.setCoverImage(bookDto.getCoverImage());
         foundBook.setGenres(genres);
         bookRepository.save(foundBook);
         return modelMapper.map(foundBook,BookResponse.class);
