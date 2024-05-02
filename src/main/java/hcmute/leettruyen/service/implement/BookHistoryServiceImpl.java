@@ -8,7 +8,7 @@ import hcmute.leettruyen.entity.User;
 import hcmute.leettruyen.repository.BookHistoryRepository;
 import hcmute.leettruyen.repository.ChapterRepository;
 import hcmute.leettruyen.repository.UserRepository;
-import hcmute.leettruyen.response.BookHistoryResponse1;
+import hcmute.leettruyen.response.BookHistoryResponse;
 import hcmute.leettruyen.service.IBookHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -28,13 +28,13 @@ public class BookHistoryServiceImpl implements IBookHistoryService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<BookHistoryResponse1> findBookHistoryByCrtUser() throws Exception {
+    public List<BookHistoryResponse> findBookHistoryByCrtUser() throws Exception {
         User founduser = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()-> new Exception("Cannot find user"));
         List<BookHistory> bookHistories = bookHistoryRepository.findByUserReadIdOrderByViewedAtDesc(founduser.getId());
         if(bookHistories != null){
             return bookHistories.stream()
-                    .map(mapper -> modelMapper.map(mapper, BookHistoryResponse1.class))
+                    .map(mapper -> modelMapper.map(mapper, BookHistoryResponse.class))
                     .collect(Collectors.toList());
         }
         return null;

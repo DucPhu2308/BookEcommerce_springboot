@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookHistoryResponse1 {
+public class BookHistoryResponse {
     private BookResponse bookRead;
     private LocalDateTime viewedAt;
 }
