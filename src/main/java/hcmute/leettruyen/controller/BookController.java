@@ -3,7 +3,7 @@ package hcmute.leettruyen.controller;
 import hcmute.leettruyen.dto.BookDto;
 import hcmute.leettruyen.entity.ResponseObject;
 import hcmute.leettruyen.response.BookResponse;
-import hcmute.leettruyen.service.IBookHistoryService;
+import hcmute.leettruyen.service.IHistoryService;
 import hcmute.leettruyen.service.IBookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BookController {
     private final IBookService bookService;
-    private final IBookHistoryService bookHistoryService;
+    private final IHistoryService bookHistoryService;
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllBook(){
         try {
@@ -238,6 +238,20 @@ public class BookController {
                     new ResponseObject("ok",
                             "",
                             bookHistoryService.findBookHistoryByCrtUser()));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/bought/{bookId}")
+    public ResponseEntity<ResponseObject> getBoughtBook(
+            @PathVariable Integer bookId
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.getChapterBoughtByBook(bookId)));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

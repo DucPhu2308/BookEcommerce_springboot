@@ -5,6 +5,7 @@ import hcmute.leettruyen.response.BookResponse;
 
 import java.util.List;
 
+import hcmute.leettruyen.response.ChapterResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -22,4 +23,5 @@ public interface IBookService {
     List<BookResponse> searchBook(String keyword);
     List<BookResponse> advancedSearch(String title, List<Integer> genres);
     List<BookResponse> getBestRateBook();
+    List<ChapterResponse> getChapterBoughtByBook(Integer bookId) throws Exception;
 }
