@@ -1,12 +1,10 @@
 package hcmute.leettruyen.service.implement;
 
 import hcmute.leettruyen.component.Extractor;
-import hcmute.leettruyen.entity.Book;
-import hcmute.leettruyen.entity.BookHistory;
-import hcmute.leettruyen.entity.Chapter;
-import hcmute.leettruyen.entity.User;
+import hcmute.leettruyen.entity.*;
 import hcmute.leettruyen.repository.BookHistoryRepository;
 import hcmute.leettruyen.repository.ChapterRepository;
+import hcmute.leettruyen.repository.PurchasedHistoryRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.BookHistoryResponse;
 import hcmute.leettruyen.service.IBookHistoryService;
@@ -26,6 +24,7 @@ public class BookHistoryServiceImpl implements IBookHistoryService {
     private final ChapterRepository chapterRepository;
     private final Extractor extractor;
     private final ModelMapper modelMapper;
+    private final PurchasedHistoryRepository purchasedHistoryRepository;
 
     @Override
     public List<BookHistoryResponse> findBookHistoryByCrtUser() throws Exception {
@@ -46,17 +45,22 @@ public class BookHistoryServiceImpl implements IBookHistoryService {
                 .orElseThrow(()-> new Exception("Cannot find user"));
         Chapter foundChapter = chapterRepository.findById(chapterId)
                 .orElseThrow(()-> new Exception("Cannot find chapter"));
-        Book foundBook = foundChapter.getBook();
-        BookHistory foundBookHistory = bookHistoryRepository.findByUserReadIdAndBookReadId(founduser.getId(), foundBook.getId());
-        if (foundBookHistory != null) {
-            foundBookHistory.setViewedAt(LocalDateTime.now());
-            bookHistoryRepository.save(foundBookHistory);
+        PurchasedHistory purchasedHistory = purchasedHistoryRepository.findByUserAndChapter(founduser,foundChapter);
+        if(purchasedHistory != null){
+            Book foundBook = foundChapter.getBook();
+            BookHistory foundBookHistory = bookHistoryRepository.findByUserReadIdAndBookReadId(founduser.getId(), foundBook.getId());
+            if (foundBookHistory != null) {
+                foundBookHistory.setViewedAt(LocalDateTime.now());
+                bookHistoryRepository.save(foundBookHistory);
+            }else {
+                BookHistory bookHistory = new BookHistory();
+                bookHistory.setUserRead(founduser);
+                bookHistory.setBookRead(foundBook);
+                bookHistory.setViewedAt(LocalDateTime.now());
+                bookHistoryRepository.save(bookHistory);
+            }
         }else {
-            BookHistory bookHistory = new BookHistory();
-            bookHistory.setUserRead(founduser);
-            bookHistory.setBookRead(foundBook);
-            bookHistory.setViewedAt(LocalDateTime.now());
-            bookHistoryRepository.save(bookHistory);
+            throw new Exception("Book not buy");
         }
     }
 }
