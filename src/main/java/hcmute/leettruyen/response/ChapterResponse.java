@@ -18,4 +18,5 @@ public class ChapterResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int bookId;
+    private boolean bought;
 }

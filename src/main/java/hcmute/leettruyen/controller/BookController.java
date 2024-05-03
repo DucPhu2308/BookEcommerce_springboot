@@ -257,4 +257,18 @@ public class BookController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @GetMapping("/{bookId}/chapter")
+    public ResponseEntity<ResponseObject> getChapterByBook(
+            @PathVariable Integer bookId
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.getChapterByBook(bookId)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
 }

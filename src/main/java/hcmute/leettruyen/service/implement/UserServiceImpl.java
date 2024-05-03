@@ -196,7 +196,7 @@ public class UserServiceImpl implements IUserService {
             throw new Exception("Chapter already purchased");
         }
         int coin = current.getCoin();
-        if(coin > foundChapter.getPrice()){
+        if(coin >= foundChapter.getPrice()){
             coin -= foundChapter.getPrice();
             current.setCoin(coin);
             userRepository.save(current);

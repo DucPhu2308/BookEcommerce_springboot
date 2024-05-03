@@ -24,4 +24,5 @@ public interface IBookService {
     List<BookResponse> advancedSearch(String title, List<Integer> genres);
     List<BookResponse> getBestRateBook();
     List<ChapterResponse> getChapterBoughtByBook(Integer bookId) throws Exception;
+    List<ChapterResponse> getChapterByBook(Integer bookId) throws Exception;
 }

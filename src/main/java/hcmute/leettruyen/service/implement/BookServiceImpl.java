@@ -11,6 +11,7 @@ import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.ChapterResponse;
 import hcmute.leettruyen.service.IBookService;
+import hcmute.leettruyen.service.IChapterService;
 import hcmute.leettruyen.service.IPurchasedService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,6 +35,7 @@ public class BookServiceImpl implements IBookService {
     private final ModelMapper modelMapper;
     private final Extractor extractor;
     private final FirebaseStorageService firebaseStorageService;
+    private final IChapterService chapterService;
     private final IPurchasedService purchasedService;
 
     @Override
@@ -176,6 +178,19 @@ public class BookServiceImpl implements IBookService {
                         modelMapper.map(purchasedHistory.getChapter(),ChapterResponse.class) : null)
                 .collect(Collectors.toList());
     }
-
-
+    @Override
+    public List<ChapterResponse> getChapterByBook(Integer bookId) throws Exception {
+        Book foundBook = bookRepository.findById(bookId)
+                .orElseThrow(()-> new Exception("Cannot find book"));
+        if(foundBook.getUserOwn().getId().equals(extractor.getUserIdFromToken())){
+            return chapterService.chapterByBook(bookId);
+        }
+        List<ChapterResponse> chapterResponses = chapterService.chapterByBook(bookId);
+        List<ChapterResponse> chapterOwn = getChapterBoughtByBook(bookId);
+        chapterResponses.forEach(chapterResponse ->
+                chapterResponse.setBought(chapterOwn.contains(chapterResponse)));
+        return chapterResponses.stream()
+                .filter(ChapterResponse::getActive)
+                .collect(Collectors.toList());
+    }
 }
