@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ public class ParagraphServiceImpl implements IParagraphService {
         modelMapper.typeMap(ParagraphDto.class, Paragraph.class)
                 .addMappings(mapper -> mapper.skip(Paragraph::setId));
         Paragraph paragraph = new Paragraph();
+        foundChapter.setUpdatedAt(LocalDateTime.now());
+        chapterRepository.save(foundChapter);
         modelMapper.map(paragraphDto, paragraph);
         paragraph.setChapter(foundChapter);
         paragraphRepository.save(paragraph);
@@ -42,12 +45,19 @@ public class ParagraphServiceImpl implements IParagraphService {
                 .orElseThrow(()-> new Exception("Cannot find chapter"));
         modelMapper.map(paragraphDto, foundParagraph);
         foundParagraph.setChapter(foundChapter);
+        foundChapter.setUpdatedAt(LocalDateTime.now());
+        chapterRepository.save(foundChapter);
         paragraphRepository.save(foundParagraph);
         return modelMapper.map(foundParagraph, ParagraphResponse.class);
     }
 
     @Override
     public void deleteParagraph(Integer id) {
+        Paragraph foundParagraph = paragraphRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Cannot find Paragraph"));
+        Chapter foundChapter = foundParagraph.getChapter();
+        foundChapter.setUpdatedAt(LocalDateTime.now());
+        chapterRepository.save(foundChapter);
         paragraphRepository.deleteById(id);
     }
     @Override
