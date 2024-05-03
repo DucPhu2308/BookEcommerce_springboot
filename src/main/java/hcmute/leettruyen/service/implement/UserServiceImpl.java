@@ -192,6 +192,9 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(()-> new RuntimeException("Cannot find user"));
         Chapter foundChapter = chapterRepository.findById(chapterId)
                 .orElseThrow(()-> new RuntimeException("Cannot find chapter"));
+        if(purchasedHistoryRepository.findByUserAndChapter(current,foundChapter) != null){
+            throw new Exception("Chapter already purchased");
+        }
         int coin = current.getCoin();
         if(coin > foundChapter.getPrice()){
             coin -= foundChapter.getPrice();
