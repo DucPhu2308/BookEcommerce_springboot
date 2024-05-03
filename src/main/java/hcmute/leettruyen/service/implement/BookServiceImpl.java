@@ -9,7 +9,9 @@ import hcmute.leettruyen.repository.BookRepository;
 import hcmute.leettruyen.repository.GenreRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.BookResponse;
+import hcmute.leettruyen.response.ChapterResponse;
 import hcmute.leettruyen.service.IBookService;
+import hcmute.leettruyen.service.IPurchasedService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class BookServiceImpl implements IBookService {
     private final ModelMapper modelMapper;
     private final Extractor extractor;
     private final FirebaseStorageService firebaseStorageService;
+    private final IPurchasedService purchasedService;
 
     @Override
     public Page<BookResponse> getAllBook(PageRequest pageRequest) {
@@ -163,5 +167,15 @@ public class BookServiceImpl implements IBookService {
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
+
+    @Override
+    public List<ChapterResponse> getChapterBoughtByBook(Integer bookId) throws Exception {
+        return purchasedService.findByCrtUser()
+                .stream()
+                .map(purchasedHistory -> purchasedHistory.getChapter().getBook().getId().equals(bookId) ?
+                        modelMapper.map(purchasedHistory.getChapter(),ChapterResponse.class) : null)
+                .collect(Collectors.toList());
+    }
+
 
 }

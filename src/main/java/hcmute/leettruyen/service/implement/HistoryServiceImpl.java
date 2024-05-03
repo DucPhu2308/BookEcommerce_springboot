@@ -7,7 +7,7 @@ import hcmute.leettruyen.repository.ChapterRepository;
 import hcmute.leettruyen.repository.PurchasedHistoryRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.BookHistoryResponse;
-import hcmute.leettruyen.service.IBookHistoryService;
+import hcmute.leettruyen.service.IHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BookHistoryServiceImpl implements IBookHistoryService {
+public class HistoryServiceImpl implements IHistoryService {
     private final BookHistoryRepository bookHistoryRepository;
     private final UserRepository userRepository;
     private final ChapterRepository chapterRepository;
