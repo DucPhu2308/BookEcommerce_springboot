@@ -4,14 +4,8 @@ import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.component.JwtTokenUtil;
 import hcmute.leettruyen.dto.UpdateInfoDto;
 import hcmute.leettruyen.dto.UserDto;
-import hcmute.leettruyen.entity.Book;
-import hcmute.leettruyen.entity.Paragraph;
-import hcmute.leettruyen.entity.Role;
-import hcmute.leettruyen.entity.User;
-import hcmute.leettruyen.repository.BookRepository;
-import hcmute.leettruyen.repository.ParagraphRepository;
-import hcmute.leettruyen.repository.RoleRepository;
-import hcmute.leettruyen.repository.UserRepository;
+import hcmute.leettruyen.entity.*;
+import hcmute.leettruyen.repository.*;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.ParagraphResponse;
 import hcmute.leettruyen.response.UserResponse;
@@ -24,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +35,8 @@ public class UserServiceImpl implements IUserService {
     private final ModelMapper modelMapper;
     private final Extractor extractor;
     private final ParagraphRepository paragraphRepository;
+    private final PurchasedHistoryRepository purchasedHistoryRepository;
+    private final ChapterRepository chapterRepository;
     @Override
     public User createUser(UserDto userDto) {
         if(userRepository.existsByEmail(userDto.getEmail())){
@@ -188,5 +185,26 @@ public class UserServiceImpl implements IUserService {
         String encodedPassword = passwordEncoder.encode(password);
         user.setPassword(encodedPassword);
         userRepository.save(user);
+    }
+    @Override
+    public void buyChapter(Integer chapterId) throws Exception {
+        User current = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()-> new RuntimeException("Cannot find user"));
+        Chapter foundChapter = chapterRepository.findById(chapterId)
+                .orElseThrow(()-> new RuntimeException("Cannot find chapter"));
+        int coin = current.getCoin();
+        if(coin > foundChapter.getPrice()){
+            coin -= foundChapter.getPrice();
+            current.setCoin(coin);
+            userRepository.save(current);
+            PurchasedHistory purchasedHistory = new PurchasedHistory();
+            purchasedHistory.setUser(current);
+            purchasedHistory.setChapter(foundChapter);
+            purchasedHistory.setCoin(foundChapter.getPrice());
+            purchasedHistory.setDateTime(LocalDateTime.now());
+            purchasedHistoryRepository.save(purchasedHistory);
+        }else {
+            throw new Exception("Not enough coin");
+        }
     }
 }

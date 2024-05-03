@@ -127,4 +127,18 @@ public class UserController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @PostMapping("/buy/{chapterId}")
+    public ResponseEntity<ResponseObject> buyChapter(
+            @PathVariable Integer chapterId
+    ){
+        try {
+            userService.buyChapter(chapterId);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",""));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
 }
