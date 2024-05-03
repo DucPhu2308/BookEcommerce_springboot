@@ -182,6 +182,11 @@ public class BookServiceImpl implements IBookService {
     public List<ChapterResponse> getChapterByBook(Integer bookId) throws Exception {
         Book foundBook = bookRepository.findById(bookId)
                 .orElseThrow(()-> new Exception("Cannot find book"));
+        if(extractor.getUserIdFromToken()==null){
+            return chapterService.chapterByBook(bookId).stream()
+                    .filter(ChapterResponse::getActive)
+                    .collect(Collectors.toList());
+        }
         if(foundBook.getUserOwn().getId().equals(extractor.getUserIdFromToken())){
             return chapterService.chapterByBook(bookId);
         }
