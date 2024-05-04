@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -194,8 +195,12 @@ public class BookServiceImpl implements IBookService {
         List<ChapterResponse> chapterOwn = getChapterBoughtByBook(bookId);
         chapterResponses.forEach(chapterResponse ->
                 chapterResponse.setBought(chapterOwn.contains(chapterResponse)));
-        return chapterResponses.stream()
+        List<ChapterResponse> chapterResponseList = chapterResponses.stream()
                 .filter(ChapterResponse::getActive)
-                .collect(Collectors.toList());
+                .toList();
+        return chapterResponseList
+                .stream()
+                .sorted(Comparator.comparing(ChapterResponse::getIndex))
+                .toList();
     }
 }
