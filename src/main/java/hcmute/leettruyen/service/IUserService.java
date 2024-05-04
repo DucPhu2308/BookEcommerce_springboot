@@ -23,5 +23,5 @@ public interface IUserService {
     List<UserResponse> getFollowingUser();
     List<UserResponse> getFollowedUser();
     void changePassword(String password);
-    void buyChapter(Integer chapterId) throws Exception;
+    Integer buyChapter(Integer chapterId) throws Exception;
 }

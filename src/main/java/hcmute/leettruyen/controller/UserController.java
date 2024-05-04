@@ -132,10 +132,9 @@ public class UserController {
             @PathVariable Integer chapterId
     ){
         try {
-            userService.buyChapter(chapterId);
             return ResponseEntity.ok(
                     new ResponseObject("ok",
-                            "",""));
+                            "",userService.buyChapter(chapterId)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
