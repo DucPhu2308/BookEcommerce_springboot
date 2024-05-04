@@ -16,6 +16,7 @@ public class ChapterDto {
     private int price;
     @NotNull
     private int index;
+    private Boolean active;
     @NotNull
     private Integer book;
 }
