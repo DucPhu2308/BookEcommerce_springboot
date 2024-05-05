@@ -212,4 +212,12 @@ public class BookServiceImpl implements IBookService {
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
+
+    @Override
+    public List<BookResponse> getMostFollowBook() {
+        List<Book> books = bookRepository.findTopByOrderByUsers_followDesc();
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
 }
