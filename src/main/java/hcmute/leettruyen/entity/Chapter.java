@@ -37,4 +37,5 @@ public class Chapter extends BaseEntity{
     @JsonManagedReference
     private List<Paragraph> paragraphs;
     private Integer view;
+    private Integer buy;
 }

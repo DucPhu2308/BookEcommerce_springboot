@@ -269,12 +269,24 @@ public class BookController {
         }
     }
     @GetMapping("/most-follow")
-    public ResponseEntity<ResponseObject> getMostBuyBook(){
+    public ResponseEntity<ResponseObject> getMostFollowBook(){
         try {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
                             bookService.getMostFollowBook()));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/most-buy")
+    public ResponseEntity<ResponseObject> getMostBuyBook(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.getMostBuyBook()));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
