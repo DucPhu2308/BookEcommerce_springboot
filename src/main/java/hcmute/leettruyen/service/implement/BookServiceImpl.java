@@ -73,6 +73,7 @@ public class BookServiceImpl implements IBookService {
         book.setUserOwn(founduser);
         book.setActive(true);
         book.setViews(0);
+        book.setBuys(0);
         bookRepository.save(book);
         return modelMapper.map(book, BookResponse.class);
     }
@@ -217,6 +218,14 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> getMostFollowBook() {
         List<Book> books = bookRepository.findAll();
         books.sort(Comparator.comparingInt(book -> book.getUsers_follow().size()));
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
+
+    @Override
+    public List<BookResponse> getMostBuyBook() {
+        List<Book> books = bookRepository.findTopByOrderByBuysDesc();
         return books.stream()
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();

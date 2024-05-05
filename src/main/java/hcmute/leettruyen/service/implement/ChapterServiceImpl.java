@@ -32,6 +32,7 @@ public class ChapterServiceImpl implements IChapterService {
         chapter.setBook(foundBook);
         chapter.setActive(true);
         chapter.setView(0);
+        chapter.setBuy(0);
         chapterRepository.save(chapter);
         return modelMapper.map(chapter,ChapterResponse.class);
     }

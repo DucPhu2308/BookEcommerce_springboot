@@ -192,6 +192,7 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(()-> new RuntimeException("Cannot find user"));
         Chapter foundChapter = chapterRepository.findById(chapterId)
                 .orElseThrow(()-> new RuntimeException("Cannot find chapter"));
+        Book foundBook = foundChapter.getBook();
         if(purchasedHistoryRepository.findByUserAndChapter(current,foundChapter) != null){
             throw new Exception("Chapter already purchased");
         }
@@ -206,6 +207,10 @@ public class UserServiceImpl implements IUserService {
             purchasedHistory.setCoin(foundChapter.getPrice());
             purchasedHistory.setDateTime(LocalDateTime.now());
             purchasedHistoryRepository.save(purchasedHistory);
+            foundChapter.setBuy(foundChapter.getPurchasedHistories().size());
+            chapterRepository.save(foundChapter);
+            foundBook.updateBuys();
+            bookRepository.save(foundBook);
             return coin;
         }else {
             throw new Exception("Not enough coin");

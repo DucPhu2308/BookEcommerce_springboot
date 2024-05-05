@@ -20,4 +20,5 @@ public class ChapterResponse {
     private int bookId;
     private boolean bought;
     private int view;
+    private int buy;
 }

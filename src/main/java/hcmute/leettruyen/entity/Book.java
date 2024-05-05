@@ -53,12 +53,19 @@ public class Book extends BaseEntity{
     @JsonBackReference
     private User userOwn;
     private Integer views;
-
+    private Integer buys;
     public void updateViews() {
         int view = 0;
         for (Chapter chapter : chapters) {
             view += chapter.getView();
             this.views = view;
+        }
+    }
+    public void updateBuys() {
+        int buy = 0;
+        for (Chapter chapter : chapters) {
+            buy += chapter.getPurchasedHistories().size();
+            this.buys = buy;
         }
     }
 }

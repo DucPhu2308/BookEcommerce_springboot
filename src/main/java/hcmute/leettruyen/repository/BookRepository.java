@@ -15,6 +15,7 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     List<Book> findByTitleContaining(String title);
     List<Book> findTopByOrderByAvgRatingDesc();
     List<Book> findTopByOrderByViewsDesc();
+    List<Book> findTopByOrderByBuysDesc();
     // find <num> books sort by date with
     // <num> is the number of books to find
     @Query("SELECT b FROM Book b ORDER BY b.publicDate DESC LIMIT:num")
