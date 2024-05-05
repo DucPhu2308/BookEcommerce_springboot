@@ -25,4 +25,6 @@ public interface IBookService {
     List<BookResponse> getBestRateBook();
     List<ChapterResponse> getChapterBoughtByBook(Integer bookId) throws Exception;
     List<ChapterResponse> getChapterByBook(Integer bookId) throws Exception;
+    List<BookResponse> getMostViewBook();
+    List<BookResponse> getMostFollowBook();
 }

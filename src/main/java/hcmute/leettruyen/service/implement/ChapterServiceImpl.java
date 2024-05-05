@@ -31,6 +31,7 @@ public class ChapterServiceImpl implements IChapterService {
         modelMapper.map(chapterDto, chapter);
         chapter.setBook(foundBook);
         chapter.setActive(true);
+        chapter.setView(0);
         chapterRepository.save(chapter);
         return modelMapper.map(chapter,ChapterResponse.class);
     }
@@ -40,6 +41,24 @@ public class ChapterServiceImpl implements IChapterService {
         Chapter foundChapter = chapterRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find chapter"));
         return modelMapper.map(foundChapter, ChapterResponse.class);
+    }
+
+    @Override
+    public void deleteChapter(Integer id) throws Exception {
+        Chapter foundChapter = chapterRepository.findById(id)
+                .orElseThrow(()-> new Exception("Cannot find chapter"));
+        chapterRepository.delete(foundChapter);
+    }
+
+    @Override
+    public void increaseView(Integer id) throws Exception {
+        Chapter foundChapter = chapterRepository.findById(id)
+                .orElseThrow(()-> new Exception("Cannot find chapter"));
+        foundChapter.setView(foundChapter.getView()+1);
+        chapterRepository.save(foundChapter);
+        Book foundBook = foundChapter.getBook();
+        foundBook.updateViews();
+        bookRepository.save(foundBook);
     }
 
     @Override

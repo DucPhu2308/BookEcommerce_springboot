@@ -52,4 +52,13 @@ public class Book extends BaseEntity{
     )
     @JsonBackReference
     private User userOwn;
+    private Integer views;
+
+    public void updateViews() {
+        int view = 0;
+        for (Chapter chapter : chapters) {
+            view += chapter.getView();
+            this.views = view;
+        }
+    }
 }

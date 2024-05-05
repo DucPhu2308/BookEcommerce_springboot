@@ -26,7 +26,6 @@ public class ChapterController {
     ){
 
         try {
-            // sort chapter by index
             List<ChapterResponse> chapterResponses = chapterService.chapterByBook(id).stream()
                     .sorted(Comparator.comparingInt(ChapterResponse::getIndex))
                     .toList();
@@ -49,6 +48,20 @@ public class ChapterController {
                     new ResponseObject("ok",
                             "",
                             chapterService.getChapterById(id)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseObject> deleteChapter(
+            @PathVariable Integer id
+    ){
+        try {
+            chapterService.deleteChapter(id);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",""));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

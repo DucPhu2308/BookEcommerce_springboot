@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,6 +72,7 @@ public class BookServiceImpl implements IBookService {
         book.setPublicDate(LocalDateTime.now());
         book.setUserOwn(founduser);
         book.setActive(true);
+        book.setViews(0);
         bookRepository.save(book);
         return modelMapper.map(book, BookResponse.class);
     }
@@ -194,8 +196,29 @@ public class BookServiceImpl implements IBookService {
         List<ChapterResponse> chapterOwn = getChapterBoughtByBook(bookId);
         chapterResponses.forEach(chapterResponse ->
                 chapterResponse.setBought(chapterOwn.contains(chapterResponse)));
-        return chapterResponses.stream()
+        List<ChapterResponse> chapterResponseList = chapterResponses.stream()
                 .filter(ChapterResponse::getActive)
-                .collect(Collectors.toList());
+                .toList();
+        return chapterResponseList
+                .stream()
+                .sorted(Comparator.comparing(ChapterResponse::getIndex))
+                .toList();
+    }
+
+    @Override
+    public List<BookResponse> getMostViewBook() {
+        List<Book> books = bookRepository.findTopByOrderByViewsDesc();
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
+    }
+
+    @Override
+    public List<BookResponse> getMostFollowBook() {
+        List<Book> books = bookRepository.findAll();
+        books.sort(Comparator.comparingInt(book -> book.getUsers_follow().size()));
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
+                .toList();
     }
 }

@@ -36,4 +36,5 @@ public class Chapter extends BaseEntity{
     @OneToMany(mappedBy = "chapter")
     @JsonManagedReference
     private List<Paragraph> paragraphs;
+    private Integer view;
 }

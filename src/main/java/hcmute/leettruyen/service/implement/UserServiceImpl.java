@@ -187,7 +187,7 @@ public class UserServiceImpl implements IUserService {
         userRepository.save(user);
     }
     @Override
-    public void buyChapter(Integer chapterId) throws Exception {
+    public Integer buyChapter(Integer chapterId) throws Exception {
         User current = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()-> new RuntimeException("Cannot find user"));
         Chapter foundChapter = chapterRepository.findById(chapterId)
@@ -206,6 +206,7 @@ public class UserServiceImpl implements IUserService {
             purchasedHistory.setCoin(foundChapter.getPrice());
             purchasedHistory.setDateTime(LocalDateTime.now());
             purchasedHistoryRepository.save(purchasedHistory);
+            return coin;
         }else {
             throw new Exception("Not enough coin");
         }
