@@ -24,4 +24,5 @@ public class BookResponse {
     private UserResponse userOwn;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private int views;
 }

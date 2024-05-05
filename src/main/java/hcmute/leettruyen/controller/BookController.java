@@ -4,6 +4,7 @@ import hcmute.leettruyen.dto.BookDto;
 import hcmute.leettruyen.entity.ResponseObject;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.service.IBookService;
+import hcmute.leettruyen.service.IChapterService;
 import hcmute.leettruyen.service.IHistoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BookController {
     private final IBookService bookService;
-    private final IHistoryService bookHistoryService;
+    private final IHistoryService historyService;
+    private final IChapterService chapterService;
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllBook(){
         try {
@@ -221,7 +223,8 @@ public class BookController {
             @PathVariable Integer chapterId
     ){
         try {
-            bookHistoryService.createBookHistory(chapterId);
+            historyService.createBookHistory(chapterId);
+            chapterService.increaseView(chapterId);
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
@@ -237,7 +240,7 @@ public class BookController {
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",
-                            bookHistoryService.findBookHistoryByCrtUser()));
+                            historyService.findBookHistoryByCrtUser()));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
@@ -266,6 +269,18 @@ public class BookController {
                     new ResponseObject("ok",
                             "",
                             bookService.getChapterByBook(bookId)));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @GetMapping("/most-view")
+    public ResponseEntity<ResponseObject> getMostViewBook(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            bookService.getMostViewBook()));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));

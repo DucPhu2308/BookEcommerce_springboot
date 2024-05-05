@@ -19,4 +19,5 @@ public class ChapterResponse {
     private LocalDateTime updatedAt;
     private int bookId;
     private boolean bought;
+    private int view;
 }

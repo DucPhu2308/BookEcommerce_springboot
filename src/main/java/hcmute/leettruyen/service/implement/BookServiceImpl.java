@@ -72,6 +72,7 @@ public class BookServiceImpl implements IBookService {
         book.setPublicDate(LocalDateTime.now());
         book.setUserOwn(founduser);
         book.setActive(true);
+        book.setViews(0);
         bookRepository.save(book);
         return modelMapper.map(book, BookResponse.class);
     }
@@ -201,6 +202,14 @@ public class BookServiceImpl implements IBookService {
         return chapterResponseList
                 .stream()
                 .sorted(Comparator.comparing(ChapterResponse::getIndex))
+                .toList();
+    }
+
+    @Override
+    public List<BookResponse> getMostViewBook() {
+        List<Book> books = bookRepository.findTopByOrderByViewsDesc();
+        return books.stream()
+                .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
 }
