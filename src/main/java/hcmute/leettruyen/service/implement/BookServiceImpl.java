@@ -167,7 +167,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public List<BookResponse> getBestRateBook() {
-        List<Book> books = bookRepository.findTopByOrderByAvgRatingDesc();
+        List<Book> books = bookRepository.findByOrderByAvgRatingDesc();
         return books.stream()
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
@@ -208,7 +208,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public List<BookResponse> getMostViewBook() {
-        List<Book> books = bookRepository.findTopByOrderByViewsDesc();
+        List<Book> books = bookRepository.findByOrderByViewsDesc();
         return books.stream()
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
@@ -225,7 +225,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public List<BookResponse> getMostBuyBook() {
-        List<Book> books = bookRepository.findTopByOrderByBuysDesc();
+        List<Book> books = bookRepository.findByOrderByBuysDesc();
         return books.stream()
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
