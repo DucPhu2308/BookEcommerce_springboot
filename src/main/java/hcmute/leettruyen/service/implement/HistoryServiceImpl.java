@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+
 @RequiredArgsConstructor
+@Service
 public class HistoryServiceImpl implements IHistoryService {
     private final BookHistoryRepository bookHistoryRepository;
     private final UserRepository userRepository;

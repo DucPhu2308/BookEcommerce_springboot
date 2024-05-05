@@ -215,7 +215,8 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public List<BookResponse> getMostFollowBook() {
-        List<Book> books = bookRepository.findTopByOrderByUsers_followDesc();
+        List<Book> books = bookRepository.findAll();
+        books.sort(Comparator.comparingInt(book -> book.getUsers_follow().size()));
         return books.stream()
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();

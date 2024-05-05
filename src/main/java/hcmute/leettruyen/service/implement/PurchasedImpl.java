@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 @RequiredArgsConstructor
+@Service
 public class PurchasedImpl implements IPurchasedService {
     private final PurchasedHistoryRepository purchasedHistoryRepository;
     private final Extractor extractor;
