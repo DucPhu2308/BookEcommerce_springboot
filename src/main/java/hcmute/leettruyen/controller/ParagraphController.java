@@ -2,6 +2,8 @@ package hcmute.leettruyen.controller;
 
 import hcmute.leettruyen.dto.ParagraphDto;
 import hcmute.leettruyen.entity.ResponseObject;
+import hcmute.leettruyen.service.IChapterService;
+import hcmute.leettruyen.service.IHistoryService;
 import hcmute.leettruyen.service.IParagraphService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParagraphController {
     private final IParagraphService paragraphService;
-
+    private final IHistoryService historyService;
+    private final IChapterService chapterService;
     @PostMapping("")
     public ResponseEntity<ResponseObject> createParagraph(
             @Valid @RequestBody ParagraphDto paragraphDto,
@@ -86,6 +89,8 @@ public class ParagraphController {
             @PathVariable Integer id
     ){
         try {
+            historyService.createBookHistory(id);
+            chapterService.increaseView(id);
             return ResponseEntity.ok(
                     new ResponseObject("ok",
                             "",

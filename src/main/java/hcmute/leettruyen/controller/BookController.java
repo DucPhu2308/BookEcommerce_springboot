@@ -4,7 +4,6 @@ import hcmute.leettruyen.dto.BookDto;
 import hcmute.leettruyen.entity.ResponseObject;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.service.IBookService;
-import hcmute.leettruyen.service.IChapterService;
 import hcmute.leettruyen.service.IHistoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ import java.util.Map;
 public class BookController {
     private final IBookService bookService;
     private final IHistoryService historyService;
-    private final IChapterService chapterService;
     @GetMapping("/all")
     public ResponseEntity<ResponseObject> getAllBook(){
         try {
@@ -213,22 +211,6 @@ public class BookController {
                     new ResponseObject("ok",
                             "",
                             bookService.getBestRateBook()));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(
-                    new ResponseObject("Fail",e.getMessage(),""));
-        }
-    }
-    @PostMapping("/{chapterId}/read")
-    public ResponseEntity<ResponseObject> readBook(
-            @PathVariable Integer chapterId
-    ){
-        try {
-            historyService.createBookHistory(chapterId);
-            chapterService.increaseView(chapterId);
-            return ResponseEntity.ok(
-                    new ResponseObject("ok",
-                            "",
-                            ""));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
