@@ -2,7 +2,6 @@ package hcmute.leettruyen.entity;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +18,6 @@ public class BaseEntity {
     @PrePersist
     protected void onCreate(){
         createdAt= LocalDateTime.now();
-        updatedAt= LocalDateTime.now();
-    }
-    @PreUpdate
-    protected void onUpdate(){
         updatedAt= LocalDateTime.now();
     }
 }
