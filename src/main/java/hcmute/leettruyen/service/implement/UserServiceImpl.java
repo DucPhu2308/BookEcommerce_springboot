@@ -62,6 +62,7 @@ public class UserServiceImpl implements IUserService {
         user.setDisplayName(userDto.getDisplayName());
         user.setIntroduction(userDto.getIntroduction());
         user.setCoin(userDto.getCoin());
+        user.setAvatar(userDto.getAvatar());
         userRepository.save(user);
         return modelMapper.map(user,UserResponse.class);
     }
