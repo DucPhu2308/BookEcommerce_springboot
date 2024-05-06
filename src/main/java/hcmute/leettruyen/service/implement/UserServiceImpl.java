@@ -9,6 +9,7 @@ import hcmute.leettruyen.repository.*;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.ParagraphResponse;
 import hcmute.leettruyen.response.UserResponse;
+import hcmute.leettruyen.service.IEmailSenderService;
 import hcmute.leettruyen.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,9 +19,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +41,8 @@ public class UserServiceImpl implements IUserService {
     private final ParagraphRepository paragraphRepository;
     private final PurchasedHistoryRepository purchasedHistoryRepository;
     private final ChapterRepository chapterRepository;
+    private final IEmailSenderService emailSenderService;
+    private final FirebaseStorageService firebaseStorageService;
     @Override
     public User createUser(UserDto userDto) {
         if(userRepository.existsByEmail(userDto.getEmail())){
@@ -45,24 +51,38 @@ public class UserServiceImpl implements IUserService {
         User user = User.builder()
                 .displayName(userDto.getDisplayName())
                 .email(userDto.getEmail())
-                .active(true)
+                .active(false)
                 .build();
         Role role = roleRepository.findById(2)
                 .orElseThrow(()-> new RuntimeException("Role not found"));
         user.setRoles(List.of(role));
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         user.setPassword(encodedPassword);
+        String token = UUID.randomUUID().toString();
+        user.setToken(token);
+        emailSenderService.sendEmail(userDto.getEmail(),"Confirm your email",token);
         return userRepository.save(user);
     }
 
     @Override
-    public UserResponse updateUserInfo(UpdateInfoDto userDto) {
+    public UserResponse updateUserInfo(UpdateInfoDto userDto) throws URISyntaxException {
         User user = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()->new RuntimeException("User not found"));
         user.setDisplayName(userDto.getDisplayName());
         user.setIntroduction(userDto.getIntroduction());
         user.setCoin(userDto.getCoin());
-        user.setAvatar(userDto.getAvatar());
+        if(userDto.getAvatar() != null){
+            String url = user.getAvatar();
+            URI uri = new URI(url);
+            String path = uri.getPath();
+
+            String[] parts = path.split("/");
+            String folder = parts[6];
+            String file_name = parts[7];
+
+            firebaseStorageService.deleteFile(folder,file_name);
+            user.setAvatar(userDto.getAvatar());
+        }
         userRepository.save(user);
         return modelMapper.map(user,UserResponse.class);
     }
@@ -75,6 +95,8 @@ public class UserServiceImpl implements IUserService {
         User user = foundUser.get();
         if (!passwordEncoder.matches(passWord, user.getPassword()))
             throw new Exception("Invalid email or password");
+        if(!user.isActive())
+            throw new Exception("Please confirm your email");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, passWord, user.getAuthorities()));
         return jwtTokenUtil.generateToken(user);
     }
@@ -215,6 +237,20 @@ public class UserServiceImpl implements IUserService {
             return coin;
         }else {
             throw new Exception("Not enough coin");
+        }
+    }
+
+    @Override
+    public UserResponse confirmToken(String token) {
+        Optional<User> foundUser = userRepository.findByToken(token);
+        if(foundUser.isPresent()){
+            User user = foundUser.get();
+            user.setActive(true);
+            user.setToken(null);
+            userRepository.save(user);
+            return modelMapper.map(user,UserResponse.class);
+        }else {
+            throw new RuntimeException("Token not found");
         }
     }
 }

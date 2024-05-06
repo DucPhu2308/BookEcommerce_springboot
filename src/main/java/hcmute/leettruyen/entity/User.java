@@ -31,6 +31,7 @@ public class User extends BaseEntity implements UserDetails {
     private String introduction;
     private boolean active;
     private String avatar;
+    private String token;
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<UserTransaction> userTransactionList;
