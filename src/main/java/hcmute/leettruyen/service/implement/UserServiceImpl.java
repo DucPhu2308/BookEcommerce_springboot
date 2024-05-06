@@ -70,8 +70,16 @@ public class UserServiceImpl implements IUserService {
     public UserResponse updateUserInfo(UpdateInfoDto userDto) throws URISyntaxException {
         User user = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()->new RuntimeException("User not found"));
-        user.setDisplayName(userDto.getDisplayName());
-        user.setIntroduction(userDto.getIntroduction());
+        if(userDto.getDisplayName() != null && !userDto.getDisplayName().isEmpty()){
+            user.setDisplayName(userDto.getDisplayName());
+        }else {
+            throw new RuntimeException("Display name is required");
+        }
+        if (userDto.getIntroduction() != null){
+            user.setIntroduction(userDto.getIntroduction());
+        }else {
+            user.setIntroduction("");
+        }
         user.setCoin(userDto.getCoin());
         if(userDto.getAvatar() != null && !userDto.getAvatar().equals(user.getAvatar())){
             if (user.getAvatar() != null){
