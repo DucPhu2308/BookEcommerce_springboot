@@ -38,9 +38,10 @@ public class AuthController {
                     new ResponseObject("failed", errorMessages.toString(),""));
         }
         try {
-                User user = userService.createUser(userDto);
-                String token = userService.login(userDto.getEmail(), userDto.getPassword());
-            return getResponseObjectResponseEntity(token, user);
+            userService.createUser(userDto);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok","","")
+            );
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
@@ -70,9 +71,11 @@ public class AuthController {
     }
     @PostMapping("/confirm")
     public ResponseEntity<ResponseObject> confirmToken(
-            @RequestParam("token") String token){
+            @RequestParam("token") String token,
+            @RequestParam("email") String email
+    ){
         try {
-            UserResponse user = userService.confirmToken(token);
+            UserResponse user = userService.confirmToken(token, email);
             return ResponseEntity.ok(
                     new ResponseObject("ok","",user)
             );

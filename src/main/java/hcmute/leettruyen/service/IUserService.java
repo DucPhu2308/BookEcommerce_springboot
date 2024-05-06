@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public interface IUserService {
-    User createUser(UserDto userDto);
+    void createUser(UserDto userDto);
     UserResponse updateUserInfo(UpdateInfoDto userDto) throws URISyntaxException;
     String login(String email, String passWord) throws Exception;
     User findByEmail(String email);
@@ -25,5 +25,5 @@ public interface IUserService {
     List<UserResponse> getFollowedUser();
     void changePassword(String password);
     Integer buyChapter(Integer chapterId) throws Exception;
-    UserResponse confirmToken(String token);
+    UserResponse confirmToken(String token, String email) throws Exception;
 }
