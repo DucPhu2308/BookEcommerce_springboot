@@ -60,7 +60,9 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(encodedPassword);
         String token = RandomString.make(6).toUpperCase();
         user.setToken(token);
-        emailSenderService.sendEmail(userDto.getEmail(),"Confirm your email",token);
+        String title = "[LeetTruyen] Confirm your email";
+        String text = "Enter this code to confirm your email: " + token;
+        emailSenderService.sendEmail(userDto.getEmail(),title,text);
         userRepository.save(user);
     }
 
@@ -71,16 +73,19 @@ public class UserServiceImpl implements IUserService {
         user.setDisplayName(userDto.getDisplayName());
         user.setIntroduction(userDto.getIntroduction());
         user.setCoin(userDto.getCoin());
-        if(userDto.getAvatar() != null){
-            String url = user.getAvatar();
-            URI uri = new URI(url);
-            String path = uri.getPath();
+        if(userDto.getAvatar() != null && !userDto.getAvatar().equals(user.getAvatar())){
+            if (user.getAvatar() != null){
+                String url = user.getAvatar();
+                URI uri = new URI(url);
+                String path = uri.getPath();
 
-            String[] parts = path.split("/");
-            String folder = parts[6];
-            String file_name = parts[7];
+                String[] parts = path.split("/");
+                String folder = parts[6];
+                String file_name = parts[7];
 
-            firebaseStorageService.deleteFile(folder,file_name);
+                firebaseStorageService.deleteFile(folder,file_name);
+            }
+
             user.setAvatar(userDto.getAvatar());
         }
         userRepository.save(user);
