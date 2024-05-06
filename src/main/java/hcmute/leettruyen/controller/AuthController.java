@@ -12,11 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +38,10 @@ public class AuthController {
                     new ResponseObject("failed", errorMessages.toString(),""));
         }
         try {
-                User user = userService.createUser(userDto);
-                String token = userService.login(userDto.getEmail(), userDto.getPassword());
-            return getResponseObjectResponseEntity(token, user);
+            userService.createUser(userDto);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok","","")
+            );
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     new ResponseObject("Fail",e.getMessage(),""));
@@ -68,6 +65,22 @@ public class AuthController {
             return getResponseObjectResponseEntity(token, user);
         } catch (Exception e) {
             return ResponseEntity.ok(
+                    new ResponseObject("fail",e.getMessage(),"")
+            );
+        }
+    }
+    @PostMapping("/confirm")
+    public ResponseEntity<ResponseObject> confirmToken(
+            @RequestParam("token") String token,
+            @RequestParam("email") String email
+    ){
+        try {
+            UserResponse user = userService.confirmToken(token, email);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok","",user)
+            );
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
                     new ResponseObject("fail",e.getMessage(),"")
             );
         }

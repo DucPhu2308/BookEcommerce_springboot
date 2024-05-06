@@ -14,5 +14,6 @@ public class UserResponse {
     private String email;
     private String displayName;
     private int coin;
+    private String avatar;
     private String introduction;
 }
