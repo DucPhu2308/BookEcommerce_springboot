@@ -60,7 +60,9 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(encodedPassword);
         String token = RandomString.make(6).toUpperCase();
         user.setToken(token);
-        emailSenderService.sendEmail(userDto.getEmail(),"Confirm your email",token);
+        String title = "[LeetTruyen] Confirm your email";
+        String text = "Enter this code to confirm your email: " + token;
+        emailSenderService.sendEmail(userDto.getEmail(),title,text);
         userRepository.save(user);
     }
 
@@ -68,19 +70,30 @@ public class UserServiceImpl implements IUserService {
     public UserResponse updateUserInfo(UpdateInfoDto userDto) throws URISyntaxException {
         User user = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()->new RuntimeException("User not found"));
-        user.setDisplayName(userDto.getDisplayName());
-        user.setIntroduction(userDto.getIntroduction());
+        if(userDto.getDisplayName() != null && !userDto.getDisplayName().isEmpty()){
+            user.setDisplayName(userDto.getDisplayName());
+        }else {
+            throw new RuntimeException("Display name is required");
+        }
+        if (userDto.getIntroduction() != null){
+            user.setIntroduction(userDto.getIntroduction());
+        }else {
+            user.setIntroduction("");
+        }
         user.setCoin(userDto.getCoin());
-        if(userDto.getAvatar() != null){
-            String url = user.getAvatar();
-            URI uri = new URI(url);
-            String path = uri.getPath();
+        if(userDto.getAvatar() != null && !userDto.getAvatar().equals(user.getAvatar())){
+            if (user.getAvatar() != null){
+                String url = user.getAvatar();
+                URI uri = new URI(url);
+                String path = uri.getPath();
 
-            String[] parts = path.split("/");
-            String folder = parts[6];
-            String file_name = parts[7];
+                String[] parts = path.split("/");
+                String folder = parts[6];
+                String file_name = parts[7];
 
-            firebaseStorageService.deleteFile(folder,file_name);
+                firebaseStorageService.deleteFile(folder,file_name);
+            }
+
             user.setAvatar(userDto.getAvatar());
         }
         userRepository.save(user);
