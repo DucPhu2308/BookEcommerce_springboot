@@ -28,6 +28,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/v1/auth/login",
                                 "/api/v1/auth/register",
+                                "/api/v1/auth/confirm",
                                 "/api/v1/upload/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET,
