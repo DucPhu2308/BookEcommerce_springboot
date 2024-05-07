@@ -83,16 +83,17 @@ public class BookServiceImpl implements IBookService {
         Book foundBook = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));
         if (bookDto.getCoverImage() != null && !bookDto.getCoverImage().equals(foundBook.getCoverImage())){
-            String url = foundBook.getCoverImage();
-            URI uri = new URI(url);
-            String path = uri.getPath();
+            if(foundBook.getCoverImage().startsWith("https://firebasestorage.googleapis.com")){
+                String url = foundBook.getCoverImage();
+                URI uri = new URI(url);
+                String path = uri.getPath();
 
-            String[] parts = path.split("/");
-            String folder = parts[6];
-            String file_name = parts[7];
+                String[] parts = path.split("/");
+                String folder = parts[6];
+                String file_name = parts[7];
 
-            firebaseStorageService.deleteFile(folder,file_name);
-
+                firebaseStorageService.deleteFile(folder,file_name);
+            }
             foundBook.setCoverImage(bookDto.getCoverImage());
         }
         List<Genre> genres = genreRepository.findAllById(bookDto.getGenresDto());
