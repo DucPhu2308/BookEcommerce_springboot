@@ -11,4 +11,5 @@ public class RatingResponse {
     private int id;
     private Float star;
     private String content;
+    private UserResponse user;
 }
