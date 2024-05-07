@@ -127,6 +127,19 @@ public class UserController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @GetMapping("/{id}/view")
+    public ResponseEntity<ResponseObject> viewUser(
+            @PathVariable Integer id
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.viewUser(id)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @PostMapping("/buy/{chapterId}")
     public ResponseEntity<ResponseObject> buyChapter(
             @PathVariable Integer chapterId

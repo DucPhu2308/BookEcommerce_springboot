@@ -9,6 +9,7 @@ import hcmute.leettruyen.repository.*;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.ParagraphResponse;
 import hcmute.leettruyen.response.UserResponse;
+import hcmute.leettruyen.response.ViewUserResponse;
 import hcmute.leettruyen.service.IEmailSenderService;
 import hcmute.leettruyen.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -268,5 +269,22 @@ public class UserServiceImpl implements IUserService {
         user.setToken(null);
         userRepository.save(user);
         return modelMapper.map(user,UserResponse.class);
+    }
+
+    @Override
+    public ViewUserResponse viewUser(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new RuntimeException("User not found"));
+        User crtUser = userRepository.findById(extractor.getUserIdFromToken())
+                .orElseThrow(()->new RuntimeException("User not found"));
+        return ViewUserResponse.builder()
+                .displayName(user.getDisplayName())
+                .avatar(user.getAvatar())
+                .introduction(user.getIntroduction())
+                .isFollow(user.getSubscribing().contains(crtUser))
+                .own(user.getOwn().stream().map(
+                        mappers -> modelMapper.map(mappers,BookResponse.class)
+                ).collect(Collectors.toList()))
+                .build();
     }
 }

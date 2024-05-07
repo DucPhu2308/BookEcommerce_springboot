@@ -6,6 +6,7 @@ import hcmute.leettruyen.entity.User;
 import hcmute.leettruyen.response.BookResponse;
 import hcmute.leettruyen.response.ParagraphResponse;
 import hcmute.leettruyen.response.UserResponse;
+import hcmute.leettruyen.response.ViewUserResponse;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,4 +27,5 @@ public interface IUserService {
     void changePassword(String password);
     Integer buyChapter(Integer chapterId) throws Exception;
     UserResponse confirmToken(String token, String email) throws Exception;
+    ViewUserResponse viewUser(Integer userId);
 }
