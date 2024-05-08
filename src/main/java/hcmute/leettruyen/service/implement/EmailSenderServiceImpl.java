@@ -14,7 +14,7 @@ public class EmailSenderServiceImpl implements IEmailSenderService {
     @Override
     public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("Chome710@gmail.com");
+        message.setFrom("nguyenducphu200321@gmail.com");
         message.setText(text);
         message.setSubject(subject);
         message.setTo(to);
