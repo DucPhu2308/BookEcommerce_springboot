@@ -132,6 +132,7 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> getBooksSortByDate(Integer num){
         List<Book> books = bookRepository.findTopNByOrderByPublicDateDesc(num);
         return books.stream()
+                .filter(Book::getActive)
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
@@ -156,16 +157,29 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> searchBook(String keyword) {
         List<Book> books = bookRepository.findByTitleContaining(keyword);
         return books.stream()
+                .filter(Book::getActive)
+                .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
 
     @Override
     public List<BookResponse> advancedSearch(String title, List<Integer> genres) {
+        if(title.isEmpty() && genres.isEmpty()){
+            return getAllBook();
+        }
         List<Genre> genreList = genreRepository.findAllById(genres);
+        if(title.isEmpty() && !genres.isEmpty()){
+            return bookRepository.findAll()
+                    .stream()
+                    .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList) && book.getActive())
+                    .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
+                    .map(book -> modelMapper.map(book,BookResponse.class))
+                    .toList();
+        }
         List<Book> books = bookRepository.findByTitleContaining(title);
         return books.stream()
-                .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList))
+                .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList) && book.getActive())
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
@@ -174,6 +188,7 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> getBestRateBook() {
         List<Book> books = bookRepository.findByOrderByAvgRatingDesc();
         return books.stream()
+                .filter(Book::getActive)
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
@@ -215,6 +230,7 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> getMostViewBook() {
         List<Book> books = bookRepository.findByOrderByViewsDesc();
         return books.stream()
+                .filter(Book::getActive)
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
@@ -224,6 +240,7 @@ public class BookServiceImpl implements IBookService {
         List<Book> books = bookRepository.findAll();
         books.sort(Comparator.comparingInt(book -> book.getUsers_follow().size()));
         return books.stream()
+                .filter(Book::getActive)
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
@@ -232,6 +249,7 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> getMostBuyBook() {
         List<Book> books = bookRepository.findByOrderByBuysDesc();
         return books.stream()
+                .filter(Book::getActive)
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
