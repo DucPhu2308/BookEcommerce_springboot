@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +35,8 @@ public class ChapterServiceImpl implements IChapterService {
         chapter.setView(0);
         chapter.setBuy(0);
         chapterRepository.save(chapter);
+        foundBook.setUpdatedAt(LocalDateTime.now());
+        bookRepository.save(foundBook);
         return modelMapper.map(chapter,ChapterResponse.class);
     }
 
