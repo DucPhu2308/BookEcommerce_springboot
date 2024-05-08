@@ -158,6 +158,7 @@ public class BookServiceImpl implements IBookService {
         List<Book> books = bookRepository.findByTitleContaining(keyword);
         return books.stream()
                 .filter(Book::getActive)
+                .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
@@ -172,6 +173,7 @@ public class BookServiceImpl implements IBookService {
             return bookRepository.findAll()
                     .stream()
                     .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList) && book.getActive())
+                    .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
                     .map(book -> modelMapper.map(book,BookResponse.class))
                     .toList();
         }
