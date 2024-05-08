@@ -61,7 +61,9 @@ public class GenreServiceImpl implements IGenreService {
         Genre foundGenre = genreRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find genre"));
         List<Book> books = bookRepository.findAllByGenresContains(foundGenre);
-        return books.stream().map(book -> modelMapper.map(book,BookResponse.class))
+        return books.stream()
+                .filter(Book::getActive)
+                .map(book -> modelMapper.map(book,BookResponse.class))
                 .collect(Collectors.toList());
     }
 }
