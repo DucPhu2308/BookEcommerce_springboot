@@ -26,6 +26,7 @@ mvn spring-boot:run
 ```
 ## Công nghệ sử dụng
 - Frontend: ReactJS được sử dụng cho phần giao diện người dùng.
+  - Link github: [BookEcommerce_ReactJS](https://github.com/DucPhu2308/BookEcommerce_ReactJS)
 - Backend: Spring Boot để xây dựng API cho ứng dụng.
   - Spring Data JPA: Cung cấp một cách thuận tiện để truy cập và lưu trữ dữ liệu trong cơ sở dữ liệu.
   - Spring Security: Sử dụng để quản lý xác thực và ủy quyền người dùng.
@@ -34,7 +35,7 @@ mvn spring-boot:run
 - Database: PostgreSQL được sử dụng để lưu trữ thông tin về các tác phẩm văn học và người dùng.
 ## Tính năng
 1. **Quản lý truyện**: Tạo, đọc, mua, cập nhật và xóa thông tin về truyện.
-2. **Quản lý người dùng**: Đăng ký, đăng nhập và quản lý thông tin người dùng.
+2. **Quản lý người dùng**: Đăng ký, đăng nhập và quản lý thông tin người dùng. Gửi email xác nhận email người dùng khi đăng ký. Mỗi email chỉ có thể dùng cho 1 tài khoản.
 3. **Xác thực và ủy quyền**: Sử dụng JWT để xác thực người dùng và kiểm tra quyền truy cập vào các tài nguyên.
 4. **Tìm kiếm và lọc truyện**: Cung cấp api cho phép tìm kiếm và lọc truyện theo nhiều tiêu chí.
 5. **Quản lý theo dõi**: Người dùng có thể theo dõi truyện hoặc tác giả yêu thích của mình.
