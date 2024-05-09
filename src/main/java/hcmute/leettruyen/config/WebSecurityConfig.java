@@ -34,6 +34,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/book/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
+                                "/api/v1/user/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,
                                 "/api/v1/genre/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "api/v1/comment/**").permitAll()
