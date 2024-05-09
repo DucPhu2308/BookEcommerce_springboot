@@ -285,6 +285,7 @@ public class UserServiceImpl implements IUserService {
                 .own(user.getOwn().stream().map(
                         mappers -> modelMapper.map(mappers,BookResponse.class)
                 ).collect(Collectors.toList()))
+                .user_follow(user.getSubscribed().size())
                 .build();
     }
 }

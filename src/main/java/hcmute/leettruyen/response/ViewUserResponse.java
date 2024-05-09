@@ -17,5 +17,6 @@ public class ViewUserResponse {
     private String avatar;
     private String introduction;
     private List<BookResponse> own;
+    private Integer user_follow;
     private boolean isFollow;
 }
