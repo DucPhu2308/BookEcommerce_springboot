@@ -275,16 +275,23 @@ public class UserServiceImpl implements IUserService {
     public ViewUserResponse viewUser(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new RuntimeException("User not found"));
-        User crtUser = userRepository.findById(extractor.getUserIdFromToken())
-                .orElseThrow(()->new RuntimeException("User not found"));
+        boolean isFollow;
+        if (extractor.getUserIdFromToken() != null) {
+            User crtUser = userRepository.findById(extractor.getUserIdFromToken())
+                    .orElseThrow(()-> null);
+            isFollow= user.getSubscribed().contains(crtUser);
+        }else {
+            isFollow = false;
+        }
+
         return ViewUserResponse.builder()
                 .displayName(user.getDisplayName())
                 .avatar(user.getAvatar())
                 .introduction(user.getIntroduction())
-                .isFollow(user.getSubscribing().contains(crtUser))
                 .own(user.getOwn().stream().map(
                         mappers -> modelMapper.map(mappers,BookResponse.class)
                 ).collect(Collectors.toList()))
+                .isFollow(isFollow)
                 .user_follow(user.getSubscribed().size())
                 .build();
     }
