@@ -281,7 +281,7 @@ public class UserServiceImpl implements IUserService {
                 .displayName(user.getDisplayName())
                 .avatar(user.getAvatar())
                 .introduction(user.getIntroduction())
-                .isFollow(user.getSubscribing().contains(crtUser))
+                .isFollow(user.getSubscribed().contains(crtUser))
                 .own(user.getOwn().stream().map(
                         mappers -> modelMapper.map(mappers,BookResponse.class)
                 ).collect(Collectors.toList()))
