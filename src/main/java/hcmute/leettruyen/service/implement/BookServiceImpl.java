@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,14 +179,14 @@ public class BookServiceImpl implements IBookService {
         if(title.isEmpty() && !genres.isEmpty()){
             return bookRepository.findAll()
                     .stream()
-                    .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList) && book.getActive())
+                    .filter(book -> book.getGenres().stream().anyMatch(genreList::contains) && book.getActive())
                     .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
                     .map(book -> modelMapper.map(book,BookResponse.class))
                     .toList();
         }
         List<Book> books = bookRepository.findByTitleContainingIgnoreCaseCustom(title);
         return books.stream()
-                .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList) && book.getActive())
+                .filter(book -> book.getGenres().stream().anyMatch(genreList::contains) && book.getActive())
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
