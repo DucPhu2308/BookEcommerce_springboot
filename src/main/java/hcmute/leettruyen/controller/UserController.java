@@ -14,6 +14,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final IUserService userService;
+
+    @GetMapping("/all")
+    public ResponseEntity<ResponseObject> getAllUser(){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.getAllUser()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
+    @PutMapping("/updateUser/{id}")
+    public ResponseEntity<ResponseObject> updateUser(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateInfoDto updateInfoDto
+    ){
+        try {
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",userService.updateUserById(updateInfoDto,id)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @PostMapping("/follow/{id}/book")
     public ResponseEntity<ResponseObject> followBook(
             @PathVariable Integer id

@@ -13,5 +13,6 @@ public class UpdateInfoDto {
     private String displayName;
     private String introduction;
     private int coin;
+    private boolean active;
     private String avatar;
 }

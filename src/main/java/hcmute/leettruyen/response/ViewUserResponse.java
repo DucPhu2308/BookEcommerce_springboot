@@ -19,4 +19,5 @@ public class ViewUserResponse {
     private List<BookResponse> own;
     private Integer user_follow;
     private boolean isFollow;
+    private boolean active;
 }
