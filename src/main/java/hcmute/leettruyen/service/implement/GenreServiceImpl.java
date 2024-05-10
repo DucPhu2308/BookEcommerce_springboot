@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class GenreServiceImpl implements IGenreService {
         return genres
                 .stream()
                 .map(genre -> modelMapper.map(genre,GenreResponse.class))
+                .sorted(Comparator.comparing(GenreResponse::getName))
                 .collect(Collectors.toList());
     }
 
