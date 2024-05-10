@@ -163,7 +163,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public List<BookResponse> searchBook(String keyword) {
-        List<Book> books = bookRepository.findByTitleContaining(keyword);
+        List<Book> books = bookRepository.findByTitleContainingIgnoreCaseCustom(keyword);
         return books.stream()
                 .filter(Book::getActive)
                 .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
@@ -185,7 +185,7 @@ public class BookServiceImpl implements IBookService {
                     .map(book -> modelMapper.map(book,BookResponse.class))
                     .toList();
         }
-        List<Book> books = bookRepository.findByTitleContaining(title);
+        List<Book> books = bookRepository.findByTitleContainingIgnoreCaseCustom(title);
         return books.stream()
                 .filter(book -> new HashSet<>(book.getGenres()).containsAll(genreList) && book.getActive())
                 .map(book -> modelMapper.map(book,BookResponse.class))

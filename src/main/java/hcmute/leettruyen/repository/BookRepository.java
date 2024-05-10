@@ -12,7 +12,8 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     List<Book> findAllByGenresContains(Genre genre);
     @Query("SELECT AVG(r.star) FROM Rating r WHERE r.book = :book")
     Float findAverageRatingByBook(@Param("book") Book book);
-    List<Book> findByTitleContaining(String title);
+    @Query("SELECT t FROM Book t WHERE LOWER( cast(unaccent(t.title) as string)) LIKE lower(cast(unaccent(concat('%', :keyword, '%')) as string ))")
+    List<Book> findByTitleContainingIgnoreCaseCustom(String keyword);
     List<Book> findByOrderByAvgRatingDesc();
     List<Book> findByOrderByViewsDesc();
     List<Book> findByOrderByBuysDesc();
