@@ -16,4 +16,5 @@ public class UserResponse {
     private int coin;
     private String avatar;
     private String introduction;
+    private boolean active;
 }

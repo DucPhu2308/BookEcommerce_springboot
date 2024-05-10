@@ -122,6 +122,21 @@ public class BookController {
                     new ResponseObject("Fail",e.getMessage(),""));
         }
     }
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<ResponseObject> restoreBook(
+            @PathVariable Integer id
+    ){
+        try {
+            bookService.restoreBook(id);
+            return ResponseEntity.ok(
+                    new ResponseObject("ok",
+                            "",
+                            ""));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(
+                    new ResponseObject("Fail",e.getMessage(),""));
+        }
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> deleteBook(
             @PathVariable Integer id

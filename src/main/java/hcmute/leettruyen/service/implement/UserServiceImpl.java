@@ -44,6 +44,50 @@ public class UserServiceImpl implements IUserService {
     private final ChapterRepository chapterRepository;
     private final IEmailSenderService emailSenderService;
     private final FirebaseStorageService firebaseStorageService;
+
+
+    @Override
+    public UserResponse updateUserById(UpdateInfoDto userDto, Integer userId) throws URISyntaxException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new RuntimeException("User not found"));
+        if(userDto.getDisplayName() != null && !userDto.getDisplayName().isEmpty()){
+            user.setDisplayName(userDto.getDisplayName());
+        }else {
+            throw new RuntimeException("Display name is required");
+        }
+        if (userDto.getIntroduction() != null){
+            user.setIntroduction(userDto.getIntroduction());
+        }else {
+            user.setIntroduction("");
+        }
+        user.setCoin(userDto.getCoin());
+        if(userDto.getAvatar() != null && !userDto.getAvatar().equals(user.getAvatar())){
+            if (user.getAvatar() != null){
+                String url = user.getAvatar();
+                URI uri = new URI(url);
+                String path = uri.getPath();
+
+                String[] parts = path.split("/");
+                String folder = parts[6];
+                String file_name = parts[7];
+
+                firebaseStorageService.deleteFile(folder,file_name);
+            }
+
+            user.setAvatar(userDto.getAvatar());
+        }
+        user.setActive(userDto.isActive());
+        userRepository.save(user);
+        return modelMapper.map(user,UserResponse.class);
+    }
+
+    @Override
+    public List<UserResponse> getAllUser() {
+        return userRepository.findAll().stream().map(
+                mappers -> modelMapper.map(mappers,UserResponse.class)
+        ).collect(Collectors.toList());
+    }
+
     @Override
     public void createUser(UserDto userDto) {
         if(userRepository.existsByEmail(userDto.getEmail())){

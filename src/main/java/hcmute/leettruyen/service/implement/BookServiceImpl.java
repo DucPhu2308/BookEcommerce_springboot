@@ -122,6 +122,14 @@ public class BookServiceImpl implements IBookService {
     }
 
     @Override
+    public void restoreBook(Integer id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Cannot find book"));
+        book.setActive(true);
+        bookRepository.save(book);
+    }
+
+    @Override
     public BookResponse getBookById(Integer id) throws Exception {
         Book book = bookRepository.findById(id)
                 .orElseThrow(()-> new Exception("Cannot find book"));

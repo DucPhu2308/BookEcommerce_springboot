@@ -12,6 +12,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public interface IUserService {
+
+    UserResponse updateUserById(UpdateInfoDto userDto , Integer userId) throws URISyntaxException;
+    List<UserResponse> getAllUser();
     void createUser(UserDto userDto);
     UserResponse updateUserInfo(UpdateInfoDto userDto) throws URISyntaxException;
     String login(String email, String passWord) throws Exception;
