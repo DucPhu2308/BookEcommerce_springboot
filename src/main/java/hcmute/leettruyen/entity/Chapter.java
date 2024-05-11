@@ -27,13 +27,13 @@ public class Chapter extends BaseEntity{
     @JoinColumn(name = "book_id")
     @JsonBackReference
     private Book book;
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Comment> comments;
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<PurchasedHistory> purchasedHistories;
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Paragraph> paragraphs;
     private Integer view;
