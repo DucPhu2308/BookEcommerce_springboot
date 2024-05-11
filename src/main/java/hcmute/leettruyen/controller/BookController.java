@@ -32,7 +32,7 @@ public class BookController {
         try {
             List<BookResponse> bookResponses = bookService.getAllBook();
             List<BookResponse> sortedBookResponses = bookResponses.stream()
-                    .sorted(Comparator.comparing(BookResponse::getUpdatedAt))
+                    .sorted(Comparator.comparing(BookResponse::getUpdatedAt).reversed())
                     .toList();
             return ResponseEntity.ok(
                     new ResponseObject("ok",
