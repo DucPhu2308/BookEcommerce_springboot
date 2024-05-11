@@ -195,7 +195,7 @@ public class BookServiceImpl implements IBookService {
     public List<BookResponse> getBestRateBook() {
         List<Book> books = bookRepository.findByOrderByAvgRatingDesc();
         return books.stream()
-                .filter(Book::getActive)
+                .filter(book -> book.getAvgRating() != null && book.getAvgRating() > 0 && book.getActive())
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }

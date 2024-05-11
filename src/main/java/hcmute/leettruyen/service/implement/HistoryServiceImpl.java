@@ -46,6 +46,17 @@ public class HistoryServiceImpl implements IHistoryService {
                 .orElseThrow(()-> new Exception("Cannot find user"));
         Chapter foundChapter = chapterRepository.findById(chapterId)
                 .orElseThrow(()-> new Exception("Cannot find chapter"));
+        if (foundChapter.getPrice()==0){
+            PurchasedHistory purchasedHistory = purchasedHistoryRepository.findByUserAndChapter(founduser,foundChapter);
+            if(purchasedHistory == null){
+                PurchasedHistory newPurchasedHistory = new PurchasedHistory();
+                newPurchasedHistory.setUser(founduser);
+                newPurchasedHistory.setChapter(foundChapter);
+                newPurchasedHistory.setCoin(0);
+                newPurchasedHistory.setDateTime(LocalDateTime.now());
+                purchasedHistoryRepository.save(newPurchasedHistory);
+            }
+        }
         PurchasedHistory purchasedHistory = purchasedHistoryRepository.findByUserAndChapter(founduser,foundChapter);
         if(purchasedHistory != null || foundChapter.getBook().getUserOwn().equals(founduser)){
             Book foundBook = foundChapter.getBook();

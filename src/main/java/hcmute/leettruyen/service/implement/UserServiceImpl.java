@@ -127,7 +127,7 @@ public class UserServiceImpl implements IUserService {
         }
         user.setCoin(userDto.getCoin());
         if(userDto.getAvatar() != null && !userDto.getAvatar().equals(user.getAvatar())){
-            if (user.getAvatar() != null){
+            if (user.getAvatar() != null && user.getAvatar().startsWith("https://firebasestorage.googleapis.com")){
                 String url = user.getAvatar();
                 URI uri = new URI(url);
                 String path = uri.getPath();
