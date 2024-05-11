@@ -152,6 +152,7 @@ public class BookServiceImpl implements IBookService {
                 .orElseThrow(()-> new RuntimeException("Cannot find user"));
         List<Book> books = user.getOwn();
         return books.stream()
+                .filter(Book::getActive)
                 .map(book -> modelMapper.map(book,BookResponse.class))
                 .toList();
     }
