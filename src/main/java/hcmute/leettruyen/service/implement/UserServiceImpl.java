@@ -332,7 +332,10 @@ public class UserServiceImpl implements IUserService {
                 .displayName(user.getDisplayName())
                 .avatar(user.getAvatar())
                 .introduction(user.getIntroduction())
-                .own(user.getOwn().stream().map(
+                .own(user.getOwn()
+                        .stream()
+                        .filter(Book::getActive)
+                        .map(
                         mappers -> modelMapper.map(mappers,BookResponse.class)
                 ).collect(Collectors.toList()))
                 .isFollow(isFollow)
