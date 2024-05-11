@@ -3,6 +3,7 @@ package hcmute.leettruyen.service.implement;
 import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.dto.BookDto;
 import hcmute.leettruyen.entity.Book;
+import hcmute.leettruyen.entity.Chapter;
 import hcmute.leettruyen.entity.Genre;
 import hcmute.leettruyen.entity.User;
 import hcmute.leettruyen.repository.BookRepository;
@@ -41,20 +42,15 @@ public class BookServiceImpl implements IBookService {
     @Override
     public Page<BookResponse> getAllBook(PageRequest pageRequest) {
         return bookRepository.findAll(pageRequest)
-                .map(book -> {
-                    BookResponse bookResponse = new BookResponse();
-                    modelMapper.map(book, bookResponse);
-                    bookResponse.setCreatedAt(book.getCreatedAt());
-                    bookResponse.setUpdatedAt(book.getUpdatedAt());
-                    return bookResponse;
-                });
+                .map(this::mapBookToResponse);
     }
 
     @Override
     public List<BookResponse> getAllBook() {
         return bookRepository.findAll()
                 .stream()
-                .map(book -> modelMapper.map(book, BookResponse.class))
+                .filter(Book::getActive)
+                .map(this::mapBookToResponse)
                 .toList();
     }
 
@@ -116,7 +112,7 @@ public class BookServiceImpl implements IBookService {
     public void hideBook(Integer id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Cannot find book"));
-        book.setActive(false);
+        book.setActive(!book.getActive());
         bookRepository.save(book);
     }
 
@@ -140,7 +136,7 @@ public class BookServiceImpl implements IBookService {
         List<Book> books = bookRepository.findTopNByOrderByPublicDateDesc(num);
         return books.stream()
                 .filter(Book::getActive)
-                .map(book -> modelMapper.map(book,BookResponse.class))
+                .map(this::mapBookToResponse)
                 .toList();
     }
     @Override
@@ -181,13 +177,20 @@ public class BookServiceImpl implements IBookService {
                     .stream()
                     .filter(book -> book.getGenres().stream().anyMatch(genreList::contains) && book.getActive())
                     .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
-                    .map(book -> modelMapper.map(book,BookResponse.class))
+                    .map(this::mapBookToResponse)
                     .toList();
         }
         List<Book> books = bookRepository.findByTitleContainingIgnoreCaseCustom(title);
+        if (genres.isEmpty()){
+            return books.stream()
+                    .filter(Book::getActive)
+                    .sorted(Comparator.comparing(Book::getUpdatedAt).reversed())
+                    .map(this::mapBookToResponse)
+                    .toList();
+        }
         return books.stream()
                 .filter(book -> book.getGenres().stream().anyMatch(genreList::contains) && book.getActive())
-                .map(book -> modelMapper.map(book,BookResponse.class))
+                .map(this::mapBookToResponse)
                 .toList();
     }
 
@@ -248,8 +251,8 @@ public class BookServiceImpl implements IBookService {
         books.sort(Comparator.comparingInt(book -> book.getUsers_follow().size()));
         return books.stream()
                 .filter(Book::getActive)
-                .map(book -> modelMapper.map(book,BookResponse.class))
-                .toList();
+                .map(this::mapBookToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -257,7 +260,18 @@ public class BookServiceImpl implements IBookService {
         List<Book> books = bookRepository.findByOrderByBuysDesc();
         return books.stream()
                 .filter(Book::getActive)
-                .map(book -> modelMapper.map(book,BookResponse.class))
+                .map(this::mapBookToResponse)
                 .toList();
+    }
+    private BookResponse mapBookToResponse(Book book){
+        List<Chapter> activeChapters = book.getChapters().stream()
+                .filter(Chapter::getActive)
+                .toList();
+        List<ChapterResponse> chapterResponses = activeChapters.stream()
+                .map(chapter -> modelMapper.map(chapter, ChapterResponse.class))
+                .collect(Collectors.toList());
+        BookResponse bookResponse = modelMapper.map(book, BookResponse.class);
+        bookResponse.setChapters(chapterResponses);
+        return bookResponse;
     }
 }
