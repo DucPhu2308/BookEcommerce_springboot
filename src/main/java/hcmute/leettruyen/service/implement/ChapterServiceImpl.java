@@ -83,7 +83,7 @@ public class ChapterServiceImpl implements IChapterService {
                 .orElseThrow(()-> new Exception("Cannot find book"));
         List<Chapter> chapters = chapterRepository.findAllByBook(foundBook);
         List<Chapter> sortedChapters = chapters.stream()
-                .sorted(Comparator.comparingInt(Chapter::getIndex).reversed())
+                .sorted(Comparator.comparingInt(Chapter::getIndex))
                 .toList();
         return sortedChapters.stream()
                 .map(chapter -> modelMapper.map(chapter,ChapterResponse.class))

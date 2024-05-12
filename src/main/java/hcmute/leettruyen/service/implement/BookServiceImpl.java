@@ -217,6 +217,7 @@ public class BookServiceImpl implements IBookService {
                 .orElseThrow(()-> new Exception("Cannot find book"));
         if(extractor.getUserIdFromToken()==null){
             return chapterService.chapterByBook(bookId).stream()
+                    .sorted(Comparator.comparing(ChapterResponse::getIndex))
                     .filter(ChapterResponse::getActive)
                     .collect(Collectors.toList());
         }
