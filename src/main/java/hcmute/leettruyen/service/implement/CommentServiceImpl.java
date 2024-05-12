@@ -55,7 +55,9 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public void deleteComment(Integer id) {
-
+        Comment foundComment = commentRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Cannot find comment"));
+        commentRepository.deleteById(foundComment.getId());
     }
 
     @Override

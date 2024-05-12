@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 public class UserTransactionDto {
     private int coin;
     private Float amount;
-    private Integer paymentMethod;
     private Integer user;
 }

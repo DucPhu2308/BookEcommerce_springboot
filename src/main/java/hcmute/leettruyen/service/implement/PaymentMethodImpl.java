@@ -1,19 +1,28 @@
 package hcmute.leettruyen.service.implement;
 
+import hcmute.leettruyen.component.Extractor;
 import hcmute.leettruyen.config.PayConfig;
+import hcmute.leettruyen.entity.PaymentMethod;
+import hcmute.leettruyen.entity.User;
+import hcmute.leettruyen.entity.UserTransaction;
+import hcmute.leettruyen.repository.PaymentMethodRepository;
+import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.PaymentMethodResponse;
 import hcmute.leettruyen.service.IPaymentMethodService;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class PaymentMethodImpl implements IPaymentMethodService {
-
     @Override
     public PaymentMethodResponse createPayment(int amount) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -80,4 +89,7 @@ public class PaymentMethodImpl implements IPaymentMethodService {
         String paymentUrl = PayConfig.vnp_PayUrl + "?" + queryUrl;
         return new PaymentMethodResponse(paymentUrl);
     }
+
+
+
 }

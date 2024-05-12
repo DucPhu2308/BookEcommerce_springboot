@@ -8,4 +8,5 @@ import java.io.UnsupportedEncodingException;
 public interface IPaymentMethodService {
 
     PaymentMethodResponse createPayment(int amount) throws UnsupportedEncodingException;
+
 }
