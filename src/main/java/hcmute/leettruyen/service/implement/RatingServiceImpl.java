@@ -9,6 +9,7 @@ import hcmute.leettruyen.repository.BookRepository;
 import hcmute.leettruyen.repository.RatingRepository;
 import hcmute.leettruyen.repository.UserRepository;
 import hcmute.leettruyen.response.RatingResponse;
+import hcmute.leettruyen.service.IPurchasedService;
 import hcmute.leettruyen.service.IRatingService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,6 +25,7 @@ public class RatingServiceImpl implements IRatingService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final IPurchasedService purchasedService;
     private final Extractor extractor;
     @Override
     public RatingResponse createRating(RatingDto ratingDto) throws Exception {
@@ -31,6 +33,9 @@ public class RatingServiceImpl implements IRatingService {
                 .orElseThrow(()-> new Exception("Cannot find book"));
         User foundUser = userRepository.findById(extractor.getUserIdFromToken())
                 .orElseThrow(()-> new Exception("Cannot find user"));
+        if(!purchasedService.checkPurchased(foundBook.getId())){
+            throw new Exception("User not purchased");
+        }
         if(ratingRepository.existsByBookAndUser(foundBook,foundUser)){
             throw new Exception("User rated");
         }

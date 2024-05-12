@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ChapterDto {
-    @NotBlank
+    @NotBlank(message = "Title is required")
     private String title;
     private int price;
-    @NotNull
+    @NotNull(message = "Index is required")
     private int index;
     private Boolean active;
     @NotNull

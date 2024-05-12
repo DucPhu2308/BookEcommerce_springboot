@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BookDto {
-    @NotBlank
+    @NotBlank(message = "Title is required")
     private String title;
     private String description;
     private String coverImage;
