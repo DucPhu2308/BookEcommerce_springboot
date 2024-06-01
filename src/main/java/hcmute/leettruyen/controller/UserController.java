@@ -150,7 +150,7 @@ public class UserController {
                             "",""));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(
-                    new ResponseObject("Fail",e.getMessage(),""));
+                    new ResponseObject("fail",e.getMessage(),""));
         }
     }
     @GetMapping("/{id}/view")
